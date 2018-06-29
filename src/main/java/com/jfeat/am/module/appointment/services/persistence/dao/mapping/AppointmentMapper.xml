@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.appointment.services.persistence.dao.AppointmentMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.jfeat.am.module.appointment.services.persistence.model.Appointment">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="item_id" property="itemId" />
+		<result column="item_name" property="itemName" />
+		<result column="item_address" property="itemAddress" />
+		<result column="item_description" property="itemDescription" />
+		<result column="item_icon" property="itemIcon" />
+		<result column="member_id" property="memberId" />
+		<result column="status" property="status" />
+		<result column="fee" property="fee" />
+		<result column="create_time" property="createTime" />
+		<result column="appointment_time" property="appointmentTime" />
+		<result column="close_time" property="closeTime" />
+		<result column="member_phone" property="memberPhone" />
+		<result column="member_name" property="memberName" />
+		<result column="receptionist_id" property="receptionistId" />
+		<result column="server_id" property="serverId" />
+		<result column="receptionist_name" property="receptionistName" />
+		<result column="server_name" property="serverName" />
+		<result column="field_c" property="fieldC" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, type, item_id AS itemId, item_name AS itemName, item_address AS itemAddress, item_description AS itemDescription, item_icon AS itemIcon, member_id AS memberId, status, fee, create_time AS createTime, appointment_time AS appointmentTime, close_time AS closeTime, member_phone AS memberPhone, member_name AS memberName, receptionist_id AS receptionistId, server_id AS serverId, receptionist_name AS receptionistName, server_name AS serverName, field_c AS fieldC
+    </sql>
+
+</mapper>

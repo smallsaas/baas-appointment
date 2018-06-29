@@ -38,6 +38,6 @@ public class AmApplication extends WebMvcConfigurerAdapter {
 
     public static void main(String[] args) {
         SpringApplication.run(AmApplication.class, args);
-        logger.info("store modular is success!");
+        logger.info("appointment modular is success!");
     }
 }

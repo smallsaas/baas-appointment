@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentDao">
+    <sql id="Base_Column_List">
+        t_appointment.*
+    </sql>
+    <select id="findAppointmentPage" resultType="AppointmentRecord" parameterType="AppointmentRecord">
+        SELECT t_appointment.*
+        FROM t_appointment
+        WHERE 1=1
+        <if test="record.id != null and record.id>0 ">
+            AND t_appointment.id LIKE CONCAT('%',#{record.id},'%')
+        </if>
+        <if test="record.code != null and record.code!= ''">
+            AND t_appointment.code LIKE CONCAT('%',#{record.code},'%')
+        </if>
+        <if test="record.type != null and record.type!= ''">
+            AND t_appointment.type LIKE CONCAT('%',#{record.type},'%')
+        </if>
+
+        <if test="record.itemId != null and record.itemId>0 ">
+            AND t_appointment.item_id LIKE CONCAT('%',#{record.itemId},'%')
+        </if>
+
+        <if test="record.itemName != null and record.itemName!= ''">
+            AND t_appointment.item_name LIKE CONCAT('%',#{record.itemName},'%')
+        </if>
+
+        <if test="record.itemAddress != null and record.itemAddress!= ''">
+            AND t_appointment.item_address LIKE CONCAT('%',#{record.itemAddress},'%')
+        </if>
+
+        <if test="record.itemDescription != null and record.itemDescription!= ''">
+            AND t_appointment.item_description LIKE CONCAT('%',#{record.itemDescription},'%')
+        </if>
+
+        <if test="record.itemIcon != null and record.itemIcon!= ''">
+            AND t_appointment.item_icon LIKE CONCAT('%',#{record.itemIcon},'%')
+        </if>
+
+        <if test="record.memberId != null and record.memberId>0 ">
+            AND t_appointment.member_id LIKE CONCAT('%',#{record.memberId},'%')
+        </if>
+        <if test="record.status != null and record.status!= ''">
+            AND t_appointment.status LIKE CONCAT('%',#{record.status},'%')
+        </if>
+        <if test="record.fee != null and record.fee>0 ">
+            AND t_appointment.fee LIKE CONCAT('%',#{record.fee},'%')
+        </if>
+
+        <if test="record.createTime != null and record.createTime>0 ">
+            AND t_appointment.create_time LIKE CONCAT('%',#{record.createTime},'%')
+        </if>
+
+        <if test="record.appointmentTime != null and record.appointmentTime>0 ">
+            AND t_appointment.appointment_time LIKE CONCAT('%',#{record.appointmentTime},'%')
+        </if>
+
+        <if test="record.closeTime != null and record.closeTime>0 ">
+            AND t_appointment.close_time LIKE CONCAT('%',#{record.closeTime},'%')
+        </if>
+
+        <if test="record.memberPhone != null and record.memberPhone!= ''">
+            AND t_appointment.member_phone LIKE CONCAT('%',#{record.memberPhone},'%')
+        </if>
+
+        <if test="record.memberName != null and record.memberName!= ''">
+            AND t_appointment.member_name LIKE CONCAT('%',#{record.memberName},'%')
+        </if>
+
+        <if test="record.receptionistId != null and record.receptionistId>0 ">
+            AND t_appointment.receptionist_id LIKE CONCAT('%',#{record.receptionistId},'%')
+        </if>
+
+        <if test="record.serverId != null and record.serverId>0 ">
+            AND t_appointment.server_id LIKE CONCAT('%',#{record.serverId},'%')
+        </if>
+
+        <if test="record.receptionistName != null and record.receptionistName!= ''">
+            AND t_appointment.receptionist_name LIKE CONCAT('%',#{record.receptionistName},'%')
+        </if>
+
+        <if test="record.serverName != null and record.serverName!= ''">
+            AND t_appointment.server_name LIKE CONCAT('%',#{record.serverName},'%')
+        </if>
+
+        <if test="record.fieldC != null and record.fieldC!= ''">
+            AND t_appointment.field_c LIKE CONCAT('%',#{record.fieldC},'%')
+        </if>
+    </select>
+</mapper>

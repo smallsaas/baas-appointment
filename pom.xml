@@ -111,6 +111,15 @@
             <scope>test</scope>
         </dependency>
 
+
+
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>sb-starter-test</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <!--shiro依赖-->
         <dependency>
             <groupId>org.apache.shiro</groupId>
