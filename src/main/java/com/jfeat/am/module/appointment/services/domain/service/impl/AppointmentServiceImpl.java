@@ -19,7 +19,7 @@ import java.util.List;
  * @author admin
  * @since 2017-10-16
  */
-@Service("CRUDAppointmentService")
+@Service("AppointmentService")
 public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implements AppointmentService {
 
 
