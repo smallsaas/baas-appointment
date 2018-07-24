@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS t_store;
-
 DROP TABLE IF EXISTS `t_appointment`;
 CREATE TABLE `t_appointment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
