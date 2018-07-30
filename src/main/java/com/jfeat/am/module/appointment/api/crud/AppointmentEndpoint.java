@@ -94,7 +94,7 @@ public class AppointmentEndpoint extends BaseController {
     }
 
     @GetMapping
-    @ApiOperation("预约预约详情")
+    @ApiOperation("预约列表")
     public Tip queryAppointments(Page<AppointmentRecord> page,
                                  @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                  @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
