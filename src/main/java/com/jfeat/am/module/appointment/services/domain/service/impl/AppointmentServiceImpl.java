@@ -1,6 +1,7 @@
 package com.jfeat.am.module.appointment.services.domain.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
 
 import com.jfeat.am.module.appointment.services.crud.service.impl.CRUDAppointmentServiceImpl;
@@ -29,8 +30,8 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
     /**
      * 我的预约列表
      * */
-    public List<Appointment> myAppointments(long memberId){
-        List<Appointment> appointments = appointmentMapper.selectList(new EntityWrapper<Appointment>().eq("member_id",memberId));
+    public List<Appointment> myAppointments(Page<Appointment> page,Long memberId,String status){
+        List<Appointment> appointments = appointmentMapper.selectPage(page,new EntityWrapper<Appointment>().eq("member_id",memberId).like("status",status));
         return appointments;
     }
 }

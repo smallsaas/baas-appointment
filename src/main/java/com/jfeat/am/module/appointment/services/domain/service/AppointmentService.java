@@ -1,5 +1,6 @@
 package com.jfeat.am.module.appointment.services.domain.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.jfeat.am.module.appointment.services.crud.service.CRUDAppointmentService;
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
 
@@ -15,5 +16,5 @@ public interface AppointmentService extends CRUDAppointmentService{
     /**
      * 我的预约列表
      * */
-    List<Appointment> myAppointments(long memberId);
+    List<Appointment> myAppointments(Page<Appointment> page, Long memberId, String status);
 }

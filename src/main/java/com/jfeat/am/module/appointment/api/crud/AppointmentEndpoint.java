@@ -1,6 +1,10 @@
 package com.jfeat.am.module.appointment.api.crud;
 
+import com.jfeat.am.common.annotation.Permission;
 import com.jfeat.am.core.jwt.JWTKit;
+import com.jfeat.am.core.shiro.ShiroKit;
+import com.jfeat.am.module.appointment.api.permission.AppointmentPermission;
+import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +47,7 @@ import java.util.Date;
  */
 @RestController
 @Api("预约管理")
-@RequestMapping("/api/appointment/appointments")
+@RequestMapping("/api")
 public class AppointmentEndpoint extends BaseController {
 
 
@@ -54,7 +58,7 @@ public class AppointmentEndpoint extends BaseController {
     QueryAppointmentDao queryAppointmentDao;
 
     @BusinessLog(name = "Appointment", value = "create Appointment")
-    @PostMapping
+    @PostMapping("/appointment/appointments")
     @ApiOperation("新建预约")
     public Tip createAppointment(@RequestBody AppointmentModel entity) {
 
@@ -70,30 +74,53 @@ public class AppointmentEndpoint extends BaseController {
         return SuccessTip.create(affected);
     }
 
-    @GetMapping("/{id}")
-    @ApiOperation("查看预约详情")
+    @GetMapping("/appointment/appointments/{id}")
+    @Permission(AppointmentPermission.APPOINTMENT_VIEW)
+    @ApiOperation("工作人员查看预约详情")
     public Tip getAppointment(@PathVariable Long id) {
         return SuccessTip.create(appointmentService.retrieveMaster(id));
     }
 
-    @BusinessLog(name = "Appointment", value = "update Appointment")
-    @PutMapping("/{id}")
-    @ApiOperation("修改预约详情")
+    @GetMapping("/appointment/app/appointments/{id}")
+    @ApiOperation("查看自己的预约详情")
+    public Tip getMyAppointment(@PathVariable Long id) {
+        Appointment appointment = appointmentService.retrieveMaster(id);
+        Long userId = JWTKit.getUserId(getHttpServletRequest());
+        if (!appointment.getMemberId().equals(userId) ||
+         !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)){
+            throw new BusinessException(BusinessCode.NoPermission);
+        }
+        return SuccessTip.create(appointment);
+    }
 
+    @BusinessLog(name = "Appointment", value = "update Appointment")
+    @PutMapping("/appointment/appointments/{id}")
+    @ApiOperation("修改预约详情")
     public Tip updateAppointment(@PathVariable Long id, @RequestBody AppointmentModel entity) {
         entity.setId(id);
+        Appointment appointment = appointmentService.retrieveMaster(id);
+        Long userId = JWTKit.getUserId(getHttpServletRequest());
+        if (!appointment.getMemberId().equals(userId) ||
+                !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)){
+            throw new BusinessException(BusinessCode.NoPermission);
+        }
         return SuccessTip.create(appointmentService.updateMaster(entity));
     }
 
     @BusinessLog(name = "Appointment", value = "delete Appointment")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/appointment/appointments/{id}")
     @ApiOperation("删除预约详情")
-
     public Tip deleteAppointment(@PathVariable Long id) {
+        Appointment appointment = appointmentService.retrieveMaster(id);
+        Long userId = JWTKit.getUserId(getHttpServletRequest());
+        if (!appointment.getMemberId().equals(userId) ||
+                !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)){
+            throw new BusinessException(BusinessCode.NoPermission);
+        }
         return SuccessTip.create(appointmentService.deleteMaster(id));
     }
 
-    @GetMapping
+    @GetMapping("/appointment/appointments")
     @ApiOperation("预约列表")
     public Tip queryAppointments(Page<AppointmentRecord> page,
                                  @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
@@ -165,8 +192,15 @@ public class AppointmentEndpoint extends BaseController {
 
 
     @ApiOperation("我的预约列表")
-    @GetMapping("/action/appointments")
-    public Tip appointments(){
-        return SuccessTip.create(appointmentService.myAppointments(JWTKit.getUserId(getHttpServletRequest())));
+    @GetMapping("/appointment/app/appointments")
+    public Tip appointments(Page<Appointment> page,
+                            @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                            @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                            @RequestParam(name = "status", required = false) String status){
+
+        page.setCurrent(pageNum);
+        page.setSize(pageSize);
+        page.setRecords(appointmentService.myAppointments(page,JWTKit.getUserId(getHttpServletRequest()),status));
+        return SuccessTip.create(page);
     }
 }
