@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `t_appointment`;
 CREATE TABLE `t_appointment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `code` varchar(255) NOT NULL COMMENT '预约码/预约成功后前天显示',
-  `type` varchar(26) NOT NULL COMMENT ' 预约类型',
+  `type` varchar(100) NOT NULL COMMENT ' 预约类型',
   `item_id` bigint(20) default NULL COMMENT '预约服务ID',
   `item_name` varchar(255) default NULL COMMENT '预约店铺名称',
   `item_address` varchar(255) default NULL COMMENT '预约服务地址',
