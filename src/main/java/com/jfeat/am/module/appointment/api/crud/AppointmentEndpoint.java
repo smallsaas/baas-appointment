@@ -4,6 +4,7 @@ import com.jfeat.am.common.annotation.Permission;
 import com.jfeat.am.core.jwt.JWTKit;
 import com.jfeat.am.core.shiro.ShiroKit;
 import com.jfeat.am.module.appointment.api.permission.AppointmentPermission;
+import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,13 +66,14 @@ public class AppointmentEndpoint extends BaseController {
         Integer affected = 0;
         entity.setMemberId(JWTKit.getUserId(getHttpServletRequest()));
         try {
+            entity.setStatus(AppointmentStatus.WAIT_TO_STORE.toString());
             affected = appointmentService.createMaster(entity);
 
         } catch (DuplicateKeyException e) {
             throw new BusinessException(BusinessCode.DuplicateKey);
         }
 
-        return SuccessTip.create(affected);
+        return SuccessTip.create(entity.getCode());
     }
 
     @GetMapping("/appointment/appointments/{id}")
