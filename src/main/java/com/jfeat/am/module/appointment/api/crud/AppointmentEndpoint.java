@@ -1,40 +1,29 @@
 package com.jfeat.am.module.appointment.api.crud;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.jfeat.am.common.annotation.Permission;
+import com.jfeat.am.common.constant.tips.SuccessTip;
+import com.jfeat.am.common.constant.tips.Tip;
+import com.jfeat.am.common.controller.BaseController;
+import com.jfeat.am.common.exception.BusinessCode;
+import com.jfeat.am.common.exception.BusinessException;
 import com.jfeat.am.core.jwt.JWTKit;
 import com.jfeat.am.core.shiro.ShiroKit;
 import com.jfeat.am.module.appointment.api.permission.AppointmentPermission;
+import com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentDao;
 import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
+import com.jfeat.am.module.appointment.services.domain.model.AppointmentModel;
+import com.jfeat.am.module.appointment.services.domain.model.AppointmentRecord;
+import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
+import com.jfeat.am.module.log.annotation.BusinessLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import com.baomidou.mybatisplus.plugins.Page;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.dao.DuplicateKeyException;
-import com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentDao;
-import com.jfeat.am.common.constant.tips.SuccessTip;
-import com.jfeat.am.common.constant.tips.Tip;
-import com.jfeat.am.module.log.annotation.BusinessLog;
-import com.jfeat.am.common.exception.BusinessCode;
-import com.jfeat.am.common.exception.BusinessException;
-
-import java.math.BigDecimal;
-
-import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
-import com.jfeat.am.module.appointment.services.domain.model.AppointmentRecord;
-import com.jfeat.am.module.appointment.services.domain.model.AppointmentModel;
-
-import org.springframework.web.bind.annotation.RestController;
-import com.jfeat.am.common.controller.BaseController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -60,7 +49,7 @@ public class AppointmentEndpoint extends BaseController {
 
     @BusinessLog(name = "Appointment", value = "create Appointment")
     @PostMapping("/appointment/appointments")
-    @ApiOperation("新建预约")
+    @ApiOperation(value = "新建预约", response = AppointmentModel.class)
     public Tip createAppointment(@RequestBody AppointmentModel entity) {
 
         Integer affected = 0;
@@ -97,7 +86,7 @@ public class AppointmentEndpoint extends BaseController {
 
     @BusinessLog(name = "Appointment", value = "update Appointment")
     @PutMapping("/appointment/appointments/{id}")
-    @ApiOperation("修改预约详情")
+    @ApiOperation(value = "修改预约详情", response = AppointmentModel.class)
     public Tip updateAppointment(@PathVariable Long id, @RequestBody AppointmentModel entity) {
         entity.setId(id);
         Appointment appointment = appointmentService.retrieveMaster(id);
