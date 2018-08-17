@@ -11,6 +11,8 @@ public enum AppointmentStatus {
     PAYMENT_CANCEL, //未支付
     ALREADY_TO_STORE,   //已到店
     NO_TO_STORE,    //未到店
-    CANCEL          //已取消
+    CANCEL,          //已取消
+    Deprecated      //
 
-}
+
+    }

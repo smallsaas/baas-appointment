@@ -77,7 +77,6 @@ public class AppointmentEndpoint extends BaseController {
     }
 
     @GetMapping("/appointment/appointments/{id}")
-    @Permission(AppointmentPermission.APPOINTMENT_VIEW)
     @ApiOperation("工作人员查看预约详情")
     public Tip getAppointment(@PathVariable Long id) {
         return SuccessTip.create(appointmentService.retrieveMaster(id));
