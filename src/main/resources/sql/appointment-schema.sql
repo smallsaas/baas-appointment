@@ -11,7 +11,7 @@ CREATE TABLE `t_appointment` (
   `member_id` bigint(20) default NULL COMMENT '预约客户ID',
   `status` varchar(20) NOT NULL COMMENT ' 状态',
   `fee` decimal(10,2) default NULL COMMENT '费用',
-  `create_time` datetime NOT NULL COMMENT ' 创建时间',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT ' 创建时间',
   `appointment_time` datetime NOT NULL COMMENT ' 预约时间',
   `close_time` datetime DEFAULT NULL COMMENT ' 结束时间',
   `member_phone` varchar(255) DEFAULT NULL COMMENT '预约客户电话',
