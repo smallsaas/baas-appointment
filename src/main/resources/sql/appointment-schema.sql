@@ -21,5 +21,6 @@ CREATE TABLE `t_appointment` (
   `receptionist_name` varchar(26) DEFAULT NULL COMMENT '接待员',
   `server_name` varchar(26) DEFAULT NULL COMMENT '处理员',
   `field_c` varchar(255) DEFAULT NULL COMMENT '保留字段',
+  unique(`code`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
