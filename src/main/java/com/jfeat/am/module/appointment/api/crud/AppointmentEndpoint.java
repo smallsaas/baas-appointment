@@ -55,8 +55,8 @@ public class AppointmentEndpoint extends BaseController {
         Integer affected = 0;
         entity.setMemberId(JWTKit.getUserId(getHttpServletRequest()));
         try {
-            entity.setStatus(AppointmentStatus.WAIT_TO_STORE.toString());
-            affected = appointmentService.createMaster(entity);
+            entity.setStatus(AppointmentStatus.PAY_PENDING.toString());
+            affected += appointmentService.createMaster(entity);
 
         } catch (DuplicateKeyException e) {
             throw new BusinessException(BusinessCode.DuplicateKey);
