@@ -88,5 +88,12 @@
             AND t_appointment.field_c LIKE CONCAT('%',#{record.fieldC},'%')
         </if>
 
+        <if test="startTime != null and endTime != null">
+        <![CDATA[
+             AND t_appointment.appointment_time >= date(#{startTime}) AND
+                 t_appointment.appointment_time < DATE_ADD(date(#{endTime}), INTERVAL 1 DAY)
+        ]]>
+        </if>
+
     </select>
 </mapper>

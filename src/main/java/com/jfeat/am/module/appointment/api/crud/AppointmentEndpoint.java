@@ -1,7 +1,6 @@
 package com.jfeat.am.module.appointment.api.crud;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.jfeat.am.common.annotation.Permission;
 import com.jfeat.am.common.constant.tips.SuccessTip;
 import com.jfeat.am.common.constant.tips.Tip;
 import com.jfeat.am.common.controller.BaseController;
@@ -20,6 +19,7 @@ import com.jfeat.am.module.log.annotation.BusinessLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -127,7 +127,7 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "status", required = false) String status,
                                  @RequestParam(name = "fee", required = false) BigDecimal fee,
                                  @RequestParam(name = "createTime", required = false) Date createTime,
-                                 @RequestParam(name = "appointmentTime", required = false) Date appointmentTime,
+                                 @RequestParam(name = "appointmentTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date[] appointmentTime,
                                  @RequestParam(name = "closeTime", required = false) Date closeTime,
                                  @RequestParam(name = "memberPhone", required = false) String memberPhone,
                                  @RequestParam(name = "memberName", required = false) String memberName,
@@ -165,7 +165,7 @@ public class AppointmentEndpoint extends BaseController {
         record.setStatus(status);
         record.setFee(fee);
         record.setCreateTime(createTime);
-        record.setAppointmentTime(appointmentTime);
+        //record.setAppointmentTime(appointmentTime);
         record.setCloseTime(closeTime);
         record.setMemberPhone(memberPhone);
         record.setMemberName(memberName);
@@ -175,7 +175,9 @@ public class AppointmentEndpoint extends BaseController {
         record.setServerName(serverName);
         record.setFieldC(fieldC);
 
-        page.setRecords(queryAppointmentDao.findAppointmentPage(page, record, orderBy));
+        Date startTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[0] : null;
+        Date endTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[1] : null;
+        page.setRecords(queryAppointmentDao.findAppointmentPage(page, record, orderBy, startTime, endTime));
 
         return SuccessTip.create(page);
     }
