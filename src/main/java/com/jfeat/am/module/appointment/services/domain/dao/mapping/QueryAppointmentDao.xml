@@ -87,5 +87,6 @@
         <if test="record.fieldC != null and record.fieldC!= ''">
             AND t_appointment.field_c LIKE CONCAT('%',#{record.fieldC},'%')
         </if>
+
     </select>
 </mapper>
