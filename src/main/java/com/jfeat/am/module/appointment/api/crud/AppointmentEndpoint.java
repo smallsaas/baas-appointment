@@ -12,6 +12,8 @@ import com.jfeat.am.core.shiro.ShiroKit;
 import com.jfeat.am.module.appointment.api.permission.AppointmentPermission;
 import com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentDao;
 import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
+import com.jfeat.am.module.appointment.services.domain.definition.AppointmentType;
+import com.jfeat.am.module.appointment.services.domain.definition.PaymentMethods;
 import com.jfeat.am.module.appointment.services.domain.model.AppointmentModel;
 import com.jfeat.am.module.appointment.services.domain.model.AppointmentRecord;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
@@ -54,6 +56,26 @@ public class AppointmentEndpoint extends BaseController {
     @PostMapping
     @ApiOperation(value = "新建预约", response = AppointmentModel.class)
     public Tip createAppointment(@RequestBody AppointmentModel entity) {
+
+        if(entity.getType()==null){
+            throw new BusinessException(BusinessCode.BadRequest);
+        }
+
+        ///判断类型
+        if(entity.getType().equals(AppointmentType.SKIN.toString()) ||
+                entity.getType().equals(AppointmentType.DNA.toString()) ||
+        entity.getType().equals(AppointmentType.LIFE.toString())
+                ){
+            /// OK
+        }else {
+            throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE]");
+        }
+
+        //判断预约店铺名
+        if(entity.getItemId()==null || entity.getItemName()==null){
+            throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约店铺不能为空");
+        }
+
 
         Integer affected = 0;
         entity.setMemberId(JWTKit.getUserId(getHttpServletRequest()));
@@ -102,13 +124,32 @@ public class AppointmentEndpoint extends BaseController {
 
     @BusinessLog(name = "Appointment", value = "pay Appointment")
     @PostMapping("/{id}/action/pay")
-    @ApiOperation(value = "支付预约")
-    public Tip payAppointment(@PathVariable Long id) {
+    @ApiOperation(value = "支付预约", response = PaymentRequest.class)
+    public Tip payAppointment(@PathVariable Long id, @RequestBody PaymentRequest payment) {
+        if(payment==null || payment.getMethod()==null || payment.getTimestamp()==null){
+            throw new BusinessException(BusinessCode.BadRequest);
+        }
+        if(payment.getMethod().equals(PaymentMethods.ALIPAY.toString()) ||
+                payment.getMethod().equals(PaymentMethods.WECHAT.toString()) ||
+                payment.getMethod().equals(PaymentMethods.CASH.toString())
+                ){
+            // ok
+        }else{
+            return ErrorTip.create(BusinessCode.BadRequest.getCode(), "参数错误 - 支付方法 Only [ALIPAY,WECHAT,CASH]");
+        }
+
         Appointment appointment = appointmentService.retrieveMaster(id);
+
+        /// update status
         if (!appointment.getStatus().equalsIgnoreCase(AppointmentStatus.PAY_PENDING.toString())) {
             return ErrorTip.create(BusinessCode.ErrorStatus);
         }
         appointment.setStatus(AppointmentStatus.WAIT_TO_STORE.toString());
+
+        /// update payment info
+        appointment.setPaymentMethod(payment.getMethod());
+        appointment.setPaymentTimestamp(payment.getTimestamp());
+
         return SuccessTip.create(appointmentService.updateMaster(appointment));
     }
 
@@ -208,6 +249,7 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "serverId", required = false) Long serverId,
                                  @RequestParam(name = "receptionistName", required = false) String receptionistName,
                                  @RequestParam(name = "serverName", required = false) String serverName,
+                                 @RequestParam(name = "paymentMethod", required = false) String paymentMethod,
                                  @RequestParam(name = "fieldC", required = false) String fieldC,
                                  @RequestParam(name = "orderBy", required = false) String orderBy,
                                  @RequestParam(name = "sort", required = false) String sort) {
@@ -234,7 +276,17 @@ public class AppointmentEndpoint extends BaseController {
         AppointmentRecord record = new AppointmentRecord();
         record.setId(id);
         record.setCode(code);
-        record.setType(type);
+        if(type!=null && type.length()>0) {
+            if(type.equals(AppointmentType.SKIN.toString()) ||
+                    type.equals(AppointmentType.DNA.toString()) ||
+                    type.equals(AppointmentType.LIFE.toString())
+                    ){
+                /// OK
+            }else {
+                throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE]");
+            }
+            record.setType(type);
+        }
         record.setItemId(itemId);
         record.setItemName(itemName);
         record.setItemAddress(itemAddress);
@@ -253,6 +305,7 @@ public class AppointmentEndpoint extends BaseController {
         record.setReceptionistName(receptionistName);
         record.setServerName(serverName);
         record.setFieldC(fieldC);
+        record.setPaymentMethod(paymentMethod);
 
         Date startTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[0] : null;
         Date endTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[1] : null;
