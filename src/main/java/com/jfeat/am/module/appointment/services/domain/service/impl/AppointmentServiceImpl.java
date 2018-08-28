@@ -23,15 +23,18 @@ import java.util.List;
 @Service("AppointmentService")
 public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implements AppointmentService {
 
-
-
     @Resource
     AppointmentMapper appointmentMapper;
+
     /**
-     * 我的预约列表
+     * 我的预约列表, 预约时间倒序
      * */
-    public List<Appointment> myAppointments(Page<Appointment> page,Long memberId,String status){
-        List<Appointment> appointments = appointmentMapper.selectPage(page,new EntityWrapper<Appointment>().eq("member_id",memberId).like("status",status));
+    public List<Appointment> myAppointments(Page<Appointment> page, Long memberId, String status){
+        List<Appointment> appointments = appointmentMapper.selectPage(page,new EntityWrapper<Appointment>()
+                .eq("member_id",memberId)
+                .eq("status",status)
+                .orderBy(Appointment.APPOINTMENT_TIME, false)
+        );
         return appointments;
     }
 }

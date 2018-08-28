@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -37,7 +39,7 @@ import java.util.Date;
  */
 @RestController
 @Api("预约管理")
-@RequestMapping("/api")
+@RequestMapping("/api/appointment/appointments")
 public class AppointmentEndpoint extends BaseController {
 
 
@@ -48,14 +50,22 @@ public class AppointmentEndpoint extends BaseController {
     QueryAppointmentDao queryAppointmentDao;
 
     @BusinessLog(name = "Appointment", value = "create Appointment")
-    @PostMapping("/appointment/appointments")
+    @PostMapping
     @ApiOperation(value = "新建预约", response = AppointmentModel.class)
     public Tip createAppointment(@RequestBody AppointmentModel entity) {
 
         Integer affected = 0;
         entity.setMemberId(JWTKit.getUserId(getHttpServletRequest()));
         try {
-            entity.setStatus(AppointmentStatus.PAY_PENDING.toString());
+
+            if(entity.getStatus()==null) {
+                if (entity.getFee()==null || entity.getFee().compareTo(BigDecimal.ZERO)<=0 ) {
+                    entity.setStatus(AppointmentStatus.WAIT_TO_STORE.toString());
+                }else{
+                    entity.setStatus(AppointmentStatus.PAY_PENDING.toString());
+                }
+            }
+
             affected += appointmentService.createMaster(entity);
 
         } catch (DuplicateKeyException e) {
@@ -65,26 +75,14 @@ public class AppointmentEndpoint extends BaseController {
         return SuccessTip.create(entity.getCode());
     }
 
-    @GetMapping("/appointment/appointments/{id}")
-    @ApiOperation("工作人员查看预约详情")
+    @GetMapping("/{id}")
+    @ApiOperation("查看预约详情")
     public Tip getAppointment(@PathVariable Long id) {
         return SuccessTip.create(appointmentService.retrieveMaster(id));
     }
 
-    @GetMapping("/appointment/app/appointments/{id}")
-    @ApiOperation("查看自己的预约详情")
-    public Tip getMyAppointment(@PathVariable Long id) {
-        Appointment appointment = appointmentService.retrieveMaster(id);
-        Long userId = JWTKit.getUserId(getHttpServletRequest());
-        if (!appointment.getMemberId().equals(userId) ||
-         !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)){
-            throw new BusinessException(BusinessCode.NoPermission);
-        }
-        return SuccessTip.create(appointment);
-    }
-
     @BusinessLog(name = "Appointment", value = "update Appointment")
-    @PutMapping("/appointment/appointments/{id}")
+    @PutMapping("/{id}")
     @ApiOperation(value = "修改预约详情", response = AppointmentModel.class)
     public Tip updateAppointment(@PathVariable Long id, @RequestBody AppointmentModel entity) {
         entity.setId(id);
@@ -94,11 +92,15 @@ public class AppointmentEndpoint extends BaseController {
                 !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)){
             throw new BusinessException(BusinessCode.NoPermission);
         }
+
+        /// 不能直接更改状态，忽略状态更改
+        entity.setStatus(appointment.getStatus());
+
         return SuccessTip.create(appointmentService.updateMaster(entity));
     }
 
     @BusinessLog(name = "Appointment", value = "delete Appointment")
-    @DeleteMapping("/appointment/appointments/{id}")
+    @DeleteMapping("/{id}")
     @ApiOperation("删除预约详情")
     public Tip deleteAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
@@ -110,8 +112,8 @@ public class AppointmentEndpoint extends BaseController {
         return SuccessTip.create(appointmentService.deleteMaster(id));
     }
 
-    @GetMapping("/appointment/appointments")
-    @ApiOperation("预约列表")
+    @GetMapping
+    @ApiOperation("查询预约列表")
     public Tip queryAppointments(Page<AppointmentRecord> page,
                                  @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                  @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
@@ -138,6 +140,8 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "fieldC", required = false) String fieldC,
                                  @RequestParam(name = "orderBy", required = false) String orderBy,
                                  @RequestParam(name = "sort", required = false) String sort) {
+
+        /// 时间倒序
         if (orderBy != null && orderBy.length() > 0) {
             if (sort != null && sort.length() > 0) {
                 String pattern = "(ASC|DESC|asc|desc)";
@@ -148,7 +152,11 @@ public class AppointmentEndpoint extends BaseController {
                 sort = "ASC";
             }
             orderBy = "`" + orderBy + "`" + " " + sort;
+        }else{
+            /// default order by appointmentTime
+            orderBy = "`appointment_time` DESC";
         }
+
         page.setCurrent(pageNum);
         page.setSize(pageSize);
 
@@ -177,22 +185,25 @@ public class AppointmentEndpoint extends BaseController {
 
         Date startTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[0] : null;
         Date endTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[1] : null;
-        page.setRecords(queryAppointmentDao.findAppointmentPage(page, record, orderBy, startTime, endTime));
 
-        return SuccessTip.create(page);
-    }
+        List<AppointmentRecord> list = queryAppointmentDao.findAppointmentPage(page, record, orderBy, startTime, endTime);
 
+        /// 检查待到店的 过期状态，并同时更新状态
+        Calendar today = Calendar.getInstance();
+        today.add(Calendar.DAY_OF_YEAR, 1);
+        today.clear(Calendar.HOUR); today.clear(Calendar.MINUTE); today.clear(Calendar.SECOND);
+        Date todayDate = today.getTime();
+        for (AppointmentRecord r : list){
+            if(r.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
+                if (r.getAppointmentTime().compareTo(todayDate) >= 0) {
+                    r.setStatus(AppointmentStatus.EXPIRED.toString());
+                    appointmentService.updateMaster(r);
+                }
+            }
+        }
 
-    @ApiOperation("我的预约列表")
-    @GetMapping("/appointment/app/appointments")
-    public Tip appointments(Page<Appointment> page,
-                            @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                            @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                            @RequestParam(name = "status", required = false) String status){
+        page.setRecords(list);
 
-        page.setCurrent(pageNum);
-        page.setSize(pageSize);
-        page.setRecords(appointmentService.myAppointments(page,JWTKit.getUserId(getHttpServletRequest()),status));
         return SuccessTip.create(page);
     }
 }

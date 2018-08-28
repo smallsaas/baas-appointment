@@ -11,8 +11,6 @@ import java.util.List;
  */
 public interface AppointmentService extends CRUDAppointmentService{
 
-
-
     /**
      * 我的预约列表
      * */
