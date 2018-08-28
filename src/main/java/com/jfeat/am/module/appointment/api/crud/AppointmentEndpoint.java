@@ -101,7 +101,7 @@ public class AppointmentEndpoint extends BaseController {
     }
 
     @BusinessLog(name = "Appointment", value = "pay Appointment")
-    @PostMapping("/appointment/appointments/{id}/action/pay")
+    @PostMapping("/{id}/action/pay")
     @ApiOperation(value = "支付预约")
     public Tip payAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
@@ -111,6 +111,64 @@ public class AppointmentEndpoint extends BaseController {
         appointment.setStatus(AppointmentStatus.WAIT_TO_STORE.toString());
         return SuccessTip.create(appointmentService.updateMaster(appointment));
     }
+
+    @BusinessLog(name = "Appointment", value = "pay Appointment 支付超时")
+    @PostMapping("/{id}/action/timeout")
+    @ApiOperation(value = "支付超时")
+    public Tip timeoutAppointment(@PathVariable Long id) {
+        Appointment appointment = appointmentService.retrieveMaster(id);
+        if (!appointment.getStatus().equalsIgnoreCase(AppointmentStatus.PAY_PENDING.toString())) {
+            return ErrorTip.create(BusinessCode.ErrorStatus);
+        }
+        appointment.setStatus(AppointmentStatus.PAY_TIMEOUT.toString());
+        return SuccessTip.create(appointmentService.updateMaster(appointment));
+    }
+
+
+    @BusinessLog(name = "Appointment", value = "Change Appointment status - 取消预约")
+    @DeleteMapping("/{id}/action/cancel")
+    @ApiOperation("改变预约状态 - 取消预约(APP)")
+    public Tip cancelAppointment(@PathVariable Long id) {
+        Appointment appointment = appointmentService.retrieveMaster(id);
+        if(appointment.getStatus().equals(AppointmentStatus.PAY_PENDING.toString()) ||
+                appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
+            appointment.setStatus(AppointmentStatus.CANCELLED.toString());
+            return SuccessTip.create(appointmentService.updateMaster(appointment));
+        }
+
+        throw new BusinessException(BusinessCode.ErrorStatus);
+    }
+
+    @BusinessLog(name = "Appointment", value = "Change Appointment status - 会员到店")
+    @DeleteMapping("/{id}/action/check")
+    @ApiOperation("改变预约状态 - 会员到店 (iPad)")
+    public Tip checkAppointment(@PathVariable Long id) {
+        Appointment appointment = appointmentService.retrieveMaster(id);
+
+        if(appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
+            appointment.setStatus(AppointmentStatus.ALREADY_TO_STORE.toString());
+            return SuccessTip.create(appointmentService.updateMaster(appointment));
+        }
+
+        throw new BusinessException(BusinessCode.ErrorStatus);
+    }
+
+
+    @BusinessLog(name = "Appointment", value = "Change Appointment status - 会员失约")
+    @DeleteMapping("/{id}/action/miss")
+    @ApiOperation("改变预约状态 - 会员失约 (iPad)")
+    public Tip changeAppointmentStatus_miss(@PathVariable Long id) {
+        Appointment appointment = appointmentService.retrieveMaster(id);
+
+        if(appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
+            appointment.setStatus(AppointmentStatus.MISS_TO_STORE.toString());
+            return SuccessTip.create(appointmentService.updateMaster(appointment));
+        }
+
+        throw new BusinessException(BusinessCode.ErrorStatus);
+    }
+
+
 
     @BusinessLog(name = "Appointment", value = "delete Appointment")
     @DeleteMapping("/{id}")
