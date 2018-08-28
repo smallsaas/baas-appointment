@@ -1,6 +1,7 @@
 package com.jfeat.am.module.appointment.api.crud;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jfeat.am.common.constant.tips.ErrorTip;
 import com.jfeat.am.common.constant.tips.SuccessTip;
 import com.jfeat.am.common.constant.tips.Tip;
 import com.jfeat.am.common.controller.BaseController;
@@ -95,6 +96,18 @@ public class AppointmentEndpoint extends BaseController {
             throw new BusinessException(BusinessCode.NoPermission);
         }
         return SuccessTip.create(appointmentService.updateMaster(entity));
+    }
+
+    @BusinessLog(name = "Appointment", value = "pay Appointment")
+    @PostMapping("/appointment/appointments/{id}/action/pay")
+    @ApiOperation(value = "支付预约")
+    public Tip payAppointment(@PathVariable Long id) {
+        Appointment appointment = appointmentService.retrieveMaster(id);
+        if (!appointment.getStatus().equalsIgnoreCase(AppointmentStatus.PAY_PENDING.toString())) {
+            return ErrorTip.create(BusinessCode.ErrorStatus);
+        }
+        appointment.setStatus(AppointmentStatus.WAIT_TO_STORE.toString());
+        return SuccessTip.create(appointmentService.updateMaster(appointment));
     }
 
     @BusinessLog(name = "Appointment", value = "delete Appointment")
