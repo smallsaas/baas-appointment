@@ -319,7 +319,7 @@ public class AppointmentEndpoint extends BaseController {
         Date todayDate = today.getTime();
         for (AppointmentRecord r : list){
             if(r.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
-                if (r.getAppointmentTime().compareTo(todayDate) >= 0) {
+                if (r.getAppointmentTime().compareTo(todayDate) <= 0) {
                     r.setStatus(AppointmentStatus.EXPIRED.toString());
                     appointmentService.updateMaster(r);
                 }
