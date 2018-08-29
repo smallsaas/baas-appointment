@@ -22,14 +22,16 @@
 		<result column="member_name" property="memberName" />
 		<result column="receptionist_id" property="receptionistId" />
 		<result column="server_id" property="serverId" />
-		<result column="receptionist_name" property="receptionistName" />
 		<result column="server_name" property="serverName" />
+		<result column="receptionist_name" property="receptionistName" />
+		<result column="payment_timestamp" property="paymentTimestamp" />
+		<result column="payment_method" property="paymentMethod" />
 		<result column="field_c" property="fieldC" />
 	</resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, code, type, item_id AS itemId, item_name AS itemName, item_address AS itemAddress, item_description AS itemDescription, item_icon AS itemIcon, member_id AS memberId, status, fee, create_time AS createTime, appointment_time AS appointmentTime, close_time AS closeTime, member_phone AS memberPhone, member_name AS memberName, receptionist_id AS receptionistId, server_id AS serverId, receptionist_name AS receptionistName, server_name AS serverName, field_c AS fieldC
+        id, code, type, item_id AS itemId, item_name AS itemName, item_address AS itemAddress, item_description AS itemDescription, item_icon AS itemIcon, member_id AS memberId, status, fee, create_time AS createTime, appointment_time AS appointmentTime, close_time AS closeTime, member_phone AS memberPhone, member_name AS memberName, receptionist_id AS receptionistId, server_id AS serverId, server_name AS serverName, receptionist_name AS receptionistName, payment_timestamp AS paymentTimestamp, payment_method AS paymentMethod, field_c AS fieldC
     </sql>
 
 </mapper>

@@ -17,7 +17,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author Code Generator
- * @since 2018-06-29
+ * @since 2018-08-29
  */
 @TableName("t_appointment")
 public class Appointment extends Model<Appointment> {
@@ -108,15 +108,25 @@ public class Appointment extends Model<Appointment> {
 	@TableField("server_id")
 	private Long serverId;
     /**
+     * 处理员
+     */
+	@TableField("server_name")
+	private String serverName;
+    /**
      * 接待员
      */
 	@TableField("receptionist_name")
 	private String receptionistName;
     /**
-     * 处理员
+     * 支付时间
      */
-	@TableField("server_name")
-	private String serverName;
+	@TableField("payment_timestamp")
+	private Date paymentTimestamp;
+    /**
+     * 支付方试
+     */
+	@TableField("payment_method")
+	private String paymentMethod;
     /**
      * 保留字段
      */
@@ -286,6 +296,15 @@ public class Appointment extends Model<Appointment> {
 		return this;
 	}
 
+	public String getServerName() {
+		return serverName;
+	}
+
+	public Appointment setServerName(String serverName) {
+		this.serverName = serverName;
+		return this;
+	}
+
 	public String getReceptionistName() {
 		return receptionistName;
 	}
@@ -295,12 +314,21 @@ public class Appointment extends Model<Appointment> {
 		return this;
 	}
 
-	public String getServerName() {
-		return serverName;
+	public Date getPaymentTimestamp() {
+		return paymentTimestamp;
 	}
 
-	public Appointment setServerName(String serverName) {
-		this.serverName = serverName;
+	public Appointment setPaymentTimestamp(Date paymentTimestamp) {
+		this.paymentTimestamp = paymentTimestamp;
+		return this;
+	}
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public Appointment setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 		return this;
 	}
 
@@ -349,9 +377,13 @@ public class Appointment extends Model<Appointment> {
 
 	public static final String SERVER_ID = "server_id";
 
+	public static final String SERVER_NAME = "server_name";
+
 	public static final String RECEPTIONIST_NAME = "receptionist_name";
 
-	public static final String SERVER_NAME = "server_name";
+	public static final String PAYMENT_TIMESTAMP = "payment_timestamp";
+
+	public static final String PAYMENT_METHOD = "payment_method";
 
 	public static final String FIELD_C = "field_c";
 
@@ -381,8 +413,10 @@ public class Appointment extends Model<Appointment> {
 			", memberName=" + memberName +
 			", receptionistId=" + receptionistId +
 			", serverId=" + serverId +
-			", receptionistName=" + receptionistName +
 			", serverName=" + serverName +
+			", receptionistName=" + receptionistName +
+			", paymentTimestamp=" + paymentTimestamp +
+			", paymentMethod=" + paymentMethod +
 			", fieldC=" + fieldC +
 			"}";
 	}

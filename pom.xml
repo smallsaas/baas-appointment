@@ -271,7 +271,7 @@
                 <version>1.2.2</version>
                 <configuration>
                     <moduleName>appointment</moduleName>
-                    <dbUrl>jdbc:mysql://192.168.1.104/test?characterEncoding=utf-8</dbUrl>
+                    <dbUrl>jdbc:mysql://192.168.2.8/test?characterEncoding=utf-8</dbUrl>
                     <username>root</username>
                     <password>root</password>
                     <parentPackage>com.jfeat.am.module</parentPackage>

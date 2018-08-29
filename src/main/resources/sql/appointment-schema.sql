@@ -18,10 +18,11 @@ CREATE TABLE `t_appointment` (
   `member_name` varchar(100) DEFAULT NULL COMMENT '预约客户名称',
   `receptionist_id` bigint(20) DEFAULT NULL COMMENT '接待员ID',
   `server_id` bigint(20) DEFAULT NULL COMMENT '处理员ID',
+  `server_name` varchar(30) DEFAULT NULL COMMENT '处理员',
   `receptionist_name` varchar(26) DEFAULT NULL COMMENT '接待员',
-  `payment_timestamp datetime DEFAULT NULL COMMENT '支付时间',
-  `payment_method varchar(26) DEFAULT NULL COMMENT '支付方试',
+  `payment_timestamp` datetime DEFAULT NULL COMMENT '支付时间',
+  `payment_method` varchar(26) DEFAULT NULL COMMENT '支付方试',
   `field_c` varchar(100) DEFAULT NULL COMMENT '保留字段',
   unique(`code`),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT C§HARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
