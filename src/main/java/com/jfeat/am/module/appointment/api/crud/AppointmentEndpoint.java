@@ -231,7 +231,7 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                                  @RequestParam(name = "id", required = false) Long id,
                                  @RequestParam(name = "code", required = false) String code,
-                                 @RequestParam(name = "type", required = false) String type,
+                                 @RequestParam(name = "type", required = false) String[] type,
                                  @RequestParam(name = "itemId", required = false) Long itemId,
                                  @RequestParam(name = "itemName", required = false) String itemName,
                                  @RequestParam(name = "itemAddress", required = false) String itemAddress,
@@ -276,16 +276,24 @@ public class AppointmentEndpoint extends BaseController {
         AppointmentRecord record = new AppointmentRecord();
         record.setId(id);
         record.setCode(code);
-        if(type!=null && type.length()>0) {
-            if(type.equals(AppointmentType.SKIN.toString()) ||
-                    type.equals(AppointmentType.DNA.toString()) ||
-                    type.equals(AppointmentType.LIFE_BANK.toString())
-                    ){
-                /// OK
-            }else {
-                throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN,DNA,LIFE_BANK]");
+        if(type!=null && type.length>0) {
+            StringBuilder types = new StringBuilder();
+            for(String typ : type) {
+                if (type.equals(AppointmentType.SKIN.toString()) ||
+                        type.equals(AppointmentType.DNA.toString()) ||
+                        type.equals(AppointmentType.LIFE_BANK.toString())
+                        ) {
+                    /// OK
+                    types.append(typ);
+                    types.append("+");
+
+                } else {
+                    throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE_BANK] " + typ);
+                }
             }
-            record.setType(type);
+
+            String typeLine = types.deleteCharAt(types.length()-1).toString();
+            record.setType(typeLine);
         }
         record.setItemId(itemId);
         record.setItemName(itemName);
@@ -319,7 +327,7 @@ public class AppointmentEndpoint extends BaseController {
         Date todayDate = today.getTime();
         for (AppointmentRecord r : list){
             if(r.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
-                if (r.getAppointmentTime().compareTo(todayDate) >= 0) {
+                if (r.getAppointmentTime().compareTo(todayDate) <= 0) {
                     r.setStatus(AppointmentStatus.EXPIRED.toString());
                     appointmentService.updateMaster(r);
                 }
