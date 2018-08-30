@@ -7,5 +7,5 @@ public enum AppointmentType {
 
     SKIN,       //肤质测试
     DNA,        //DNA测试
-    LIFE        //生命银行
+    LIFE_BANK   //生命银行
 }

@@ -64,7 +64,7 @@ public class AppointmentEndpoint extends BaseController {
         ///判断类型
         if(entity.getType().equals(AppointmentType.SKIN.toString()) ||
                 entity.getType().equals(AppointmentType.DNA.toString()) ||
-        entity.getType().equals(AppointmentType.LIFE.toString())
+        entity.getType().equals(AppointmentType.LIFE_BANK.toString())
                 ){
             /// OK
         }else {
@@ -167,7 +167,7 @@ public class AppointmentEndpoint extends BaseController {
 
 
     @BusinessLog(name = "Appointment", value = "Change Appointment status - 取消预约")
-    @DeleteMapping("/{id}/action/cancel")
+    @PostMapping("/{id}/action/cancel")
     @ApiOperation("改变预约状态 - 取消预约(APP)")
     public Tip cancelAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
@@ -181,7 +181,7 @@ public class AppointmentEndpoint extends BaseController {
     }
 
     @BusinessLog(name = "Appointment", value = "Change Appointment status - 会员到店")
-    @DeleteMapping("/{id}/action/check")
+    @PostMapping("/{id}/action/check")
     @ApiOperation("改变预约状态 - 会员到店 (iPad)")
     public Tip checkAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
@@ -196,7 +196,7 @@ public class AppointmentEndpoint extends BaseController {
 
 
     @BusinessLog(name = "Appointment", value = "Change Appointment status - 会员失约")
-    @DeleteMapping("/{id}/action/miss")
+    @PostMapping("/{id}/action/miss")
     @ApiOperation("改变预约状态 - 会员失约 (iPad)")
     public Tip changeAppointmentStatus_miss(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
@@ -241,7 +241,7 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "status", required = false) String status,
                                  @RequestParam(name = "fee", required = false) BigDecimal fee,
                                  @RequestParam(name = "createTime", required = false) Date createTime,
-                                 @RequestParam(name = "appointmentTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date[] appointmentTime,
+                                 @RequestParam(name = "appointmentTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date[] appointmentTime,
                                  @RequestParam(name = "closeTime", required = false) Date closeTime,
                                  @RequestParam(name = "memberPhone", required = false) String memberPhone,
                                  @RequestParam(name = "memberName", required = false) String memberName,
@@ -279,11 +279,11 @@ public class AppointmentEndpoint extends BaseController {
         if(type!=null && type.length()>0) {
             if(type.equals(AppointmentType.SKIN.toString()) ||
                     type.equals(AppointmentType.DNA.toString()) ||
-                    type.equals(AppointmentType.LIFE.toString())
+                    type.equals(AppointmentType.LIFE_BANK.toString())
                     ){
                 /// OK
             }else {
-                throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE]");
+                throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN,DNA,LIFE_BANK]");
             }
             record.setType(type);
         }
