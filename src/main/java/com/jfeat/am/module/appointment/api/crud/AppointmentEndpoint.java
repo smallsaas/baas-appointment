@@ -58,17 +58,26 @@ public class AppointmentEndpoint extends BaseController {
     public Tip createAppointment(@RequestBody AppointmentModel entity) {
 
         if(entity.getType()==null){
-            throw new BusinessException(BusinessCode.BadRequest);
+            throw new BusinessException(BusinessCode.BadRequest.getCode(), "没有提交类型");
         }
 
-        ///判断类型
-        if(entity.getType().equals(AppointmentType.SKIN.toString()) ||
-                entity.getType().equals(AppointmentType.DNA.toString()) ||
-        entity.getType().equals(AppointmentType.LIFE_BANK.toString())
-                ){
-            /// OK
-        }else {
-            throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE]");
+        ///判断类型正确性
+        String[] types = entity.getType().split("\\+");
+        if(types==null || types.length==0){
+            throw new BusinessException(BusinessCode.BadRequest.getCode(), "没有提交类型");
+        }
+
+        for(String type : types) {
+            if(type!=null && type.length()>0) {
+                if (type.equals(AppointmentType.SKIN.toString()) ||
+                        type.equals(AppointmentType.DNA.toString()) ||
+                        type.equals(AppointmentType.LIFE_BANK.toString())
+                        ) {
+                    /// OK
+                } else {
+                    throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE]");
+                }
+            }
         }
 
         //判断预约店铺名
