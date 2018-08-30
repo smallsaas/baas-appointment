@@ -167,7 +167,7 @@ public class AppointmentEndpoint extends BaseController {
 
 
     @BusinessLog(name = "Appointment", value = "Change Appointment status - 取消预约")
-    @DeleteMapping("/{id}/action/cancel")
+    @PostMapping("/{id}/action/cancel")
     @ApiOperation("改变预约状态 - 取消预约(APP)")
     public Tip cancelAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
@@ -181,7 +181,7 @@ public class AppointmentEndpoint extends BaseController {
     }
 
     @BusinessLog(name = "Appointment", value = "Change Appointment status - 会员到店")
-    @DeleteMapping("/{id}/action/check")
+    @PostMapping("/{id}/action/check")
     @ApiOperation("改变预约状态 - 会员到店 (iPad)")
     public Tip checkAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
@@ -196,7 +196,7 @@ public class AppointmentEndpoint extends BaseController {
 
 
     @BusinessLog(name = "Appointment", value = "Change Appointment status - 会员失约")
-    @DeleteMapping("/{id}/action/miss")
+    @PostMapping("/{id}/action/miss")
     @ApiOperation("改变预约状态 - 会员失约 (iPad)")
     public Tip changeAppointmentStatus_miss(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
