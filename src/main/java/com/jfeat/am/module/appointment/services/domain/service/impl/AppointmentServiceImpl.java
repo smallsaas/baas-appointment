@@ -2,6 +2,7 @@ package com.jfeat.am.module.appointment.services.domain.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
 
 import com.jfeat.am.module.appointment.services.crud.service.impl.CRUDAppointmentServiceImpl;
@@ -30,11 +31,25 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
      * 我的预约列表, 预约时间倒序
      * */
     public List<Appointment> myAppointments(Page<Appointment> page, Long memberId, String status){
-        List<Appointment> appointments = appointmentMapper.selectPage(page,new EntityWrapper<Appointment>()
-                .eq("member_id",memberId)
-                .eq("status",status)
-                .orderBy(Appointment.APPOINTMENT_TIME, false)
-        );
+        // check status must be WAIT_TO_STORE, DONE
+        EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
+        wrapper.eq("member_id", memberId);
+
+        if(AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
+            wrapper.eq("status", AppointmentStatus.WAIT_TO_STORE.toString());
+
+        }else if("DONE".equals(status)){
+            wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
+                    AppointmentStatus.ALREADY_TO_STORE.toString(),
+                    AppointmentStatus.MISS_TO_STORE.toString(),
+                    AppointmentStatus.CANCELLED.toString(),
+                    AppointmentStatus.EXPIRED.toString()
+                    );
+        }
+
+        wrapper.orderBy(Appointment.APPOINTMENT_TIME, false);
+
+        List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);
         return appointments;
     }
 }

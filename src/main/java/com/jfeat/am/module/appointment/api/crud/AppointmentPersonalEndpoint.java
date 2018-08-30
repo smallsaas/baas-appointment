@@ -8,10 +8,8 @@ import com.jfeat.am.common.exception.BusinessCode;
 import com.jfeat.am.common.exception.BusinessException;
 import com.jfeat.am.core.jwt.JWTKit;
 import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
-import com.jfeat.am.module.appointment.services.domain.definition.StatusRequest;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
-import com.jfeat.am.module.log.annotation.BusinessLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -36,15 +34,25 @@ public class AppointmentPersonalEndpoint extends BaseController {
     AppointmentService appointmentService;
 
 
-    @ApiOperation("我的预约列表")
+    @ApiOperation("我的预约列表 支持两种状态 [WAIT_TO_STORE, DONE]")
     @GetMapping("/appointment/app/appointments")
     public Tip appointments(Page<Appointment> page,
                             @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                             @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                            @RequestParam(name = "status", required = false) String status){
+                            @RequestParam(name = "status", required = true) String status
+                            ){
+        if(AppointmentStatus.WAIT_TO_STORE.toString().equals(status) ||
+                "DONE".equals(status)){
+            // ok
+        }else{
+            throw new BusinessException(BusinessCode.BadRequest.getCode(), "状态仅支持 [WAIT_TO_STORE, DONE]");
+        }
+
         page.setCurrent(pageNum);
         page.setSize(pageSize);
-        page.setRecords(appointmentService.myAppointments(page,JWTKit.getUserId(getHttpServletRequest()),status));
+
+        Long memberId =  JWTKit.getUserId(getHttpServletRequest());
+        page.setRecords(appointmentService.myAppointments(page, memberId, status));
         return SuccessTip.create(page);
     }
 
