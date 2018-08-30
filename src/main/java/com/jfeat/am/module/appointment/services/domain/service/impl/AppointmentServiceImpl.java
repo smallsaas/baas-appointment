@@ -33,10 +33,10 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
     public List<Appointment> myAppointments(Page<Appointment> page, Long memberId, String status){
         // check status must be WAIT_TO_STORE, DONE
         EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
-        wrapper.eq("member_id", memberId);
+        wrapper.eq(Appointment.MEMBER_ID, memberId);
 
         if(AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
-            wrapper.eq("status", AppointmentStatus.WAIT_TO_STORE.toString());
+            wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString());
 
         }else if("DONE".equals(status)){
             wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
