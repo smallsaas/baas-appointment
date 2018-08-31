@@ -260,6 +260,7 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "serverName", required = false) String serverName,
                                  @RequestParam(name = "paymentMethod", required = false) String paymentMethod,
                                  @RequestParam(name = "fieldC", required = false) String fieldC,
+                                 @RequestParam(name = "search", required = false) String search,
                                  @RequestParam(name = "orderBy", required = false) String orderBy,
                                  @RequestParam(name = "sort", required = false) String sort) {
 
@@ -327,7 +328,7 @@ public class AppointmentEndpoint extends BaseController {
         Date startTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[0] : null;
         Date endTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[1] : null;
 
-        List<AppointmentRecord> list = queryAppointmentDao.findAppointmentPage(page, record, orderBy, startTime, endTime);
+        List<AppointmentRecord> list = queryAppointmentDao.findAppointmentPage(page, record, orderBy, search,startTime, endTime);
 
         /// 检查待到店的 过期状态，并同时更新状态
         Calendar today = Calendar.getInstance();
