@@ -127,6 +127,7 @@ public class AppointmentEndpoint extends BaseController {
 
         /// 不能直接更改状态，忽略状态更改
         entity.setStatus(appointment.getStatus());
+        appointment.setId(id);
 
         return SuccessTip.create(appointmentService.updateMaster(entity));
     }
@@ -158,7 +159,7 @@ public class AppointmentEndpoint extends BaseController {
         /// update payment info
         appointment.setPaymentMethod(payment.getMethod());
         appointment.setPaymentTimestamp(payment.getTimestamp());
-
+        appointment.setId(id);
         return SuccessTip.create(appointmentService.updateMaster(appointment));
     }
 
@@ -171,6 +172,7 @@ public class AppointmentEndpoint extends BaseController {
             return ErrorTip.create(BusinessCode.ErrorStatus);
         }
         appointment.setStatus(AppointmentStatus.PAY_TIMEOUT.toString());
+        appointment.setId(id);
         return SuccessTip.create(appointmentService.updateMaster(appointment));
     }
 
@@ -183,6 +185,7 @@ public class AppointmentEndpoint extends BaseController {
         if(appointment.getStatus().equals(AppointmentStatus.PAY_PENDING.toString()) ||
                 appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.CANCELLED.toString());
+            appointment.setId(id);
             return SuccessTip.create(appointmentService.updateMaster(appointment));
         }
 
@@ -197,6 +200,7 @@ public class AppointmentEndpoint extends BaseController {
 
         if(appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.ALREADY_TO_STORE.toString());
+            appointment.setId(id);
             return SuccessTip.create(appointmentService.updateMaster(appointment));
         }
 
@@ -212,6 +216,7 @@ public class AppointmentEndpoint extends BaseController {
 
         if(appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.MISS_TO_STORE.toString());
+            appointment.setId(id);
             return SuccessTip.create(appointmentService.updateMaster(appointment));
         }
 
