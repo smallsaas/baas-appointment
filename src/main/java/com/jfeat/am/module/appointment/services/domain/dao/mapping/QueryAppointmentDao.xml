@@ -94,8 +94,8 @@
 
         <if test="search != null">
             AND (
-               t_appointment.code LIKE CONCAT('%',#{record.code},'%')
-               t_appointment.member_name LIKE CONCAT('%',#{record.memberName},'%')
+               t_appointment.code LIKE CONCAT('%',#{record.code},'%') OR
+               t_appointment.member_name LIKE CONCAT('%',#{record.memberName},'%') OR
                t_appointment.receptionist_name LIKE CONCAT('%',#{record.receptionistName},'%')
             )
         </if>
