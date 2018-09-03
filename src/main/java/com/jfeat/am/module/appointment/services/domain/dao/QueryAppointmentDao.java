@@ -15,6 +15,7 @@ public interface QueryAppointmentDao extends BaseMapper<AppointmentRecord> {
     List<AppointmentRecord> findAppointmentPage(Page<AppointmentRecord> page,
                                                 @Param("record") AppointmentRecord record,
                                                 @Param("orderBy") String orderBy,
+                                                @Param("type") String[] type,
                                                 @Param("search") String search,
                                                 @Param("startTime") Date startTime,
                                                 @Param("endTime") Date endTime);

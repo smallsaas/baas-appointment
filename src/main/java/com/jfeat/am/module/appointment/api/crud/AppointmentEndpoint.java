@@ -292,24 +292,18 @@ public class AppointmentEndpoint extends BaseController {
         record.setId(id);
         record.setCode(code);
         if(type!=null && type.length>0) {
-            StringBuilder types = new StringBuilder();
-            for(String typ : type) {
-                if (type.equals(AppointmentType.SKIN.toString()) ||
-                        type.equals(AppointmentType.DNA.toString()) ||
-                        type.equals(AppointmentType.LIFE_BANK.toString())
+            for(String t : type) {
+                if (t.equals(AppointmentType.SKIN.toString()) ||
+                        t.equals(AppointmentType.DNA.toString()) ||
+                        t.equals(AppointmentType.LIFE_BANK.toString())
                         ) {
-                    /// OK
-                    types.append(typ);
-                    types.append("+");
-
+                    // ok
                 } else {
-                    throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE_BANK] " + typ);
+                    throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE_BANK] " + t);
                 }
             }
-
-            String typeLine = types.deleteCharAt(types.length()-1).toString();
-            record.setType(typeLine);
         }
+
         record.setItemId(itemId);
         record.setItemName(itemName);
         record.setItemAddress(itemAddress);
@@ -319,6 +313,7 @@ public class AppointmentEndpoint extends BaseController {
         record.setStatus(status);
         record.setFee(fee);
         record.setCreateTime(createTime);
+        //record.setType(type);
         //record.setAppointmentTime(appointmentTime);
         record.setCloseTime(closeTime);
         record.setMemberPhone(memberPhone);
@@ -333,7 +328,7 @@ public class AppointmentEndpoint extends BaseController {
         Date startTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[0] : null;
         Date endTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[1] : null;
 
-        List<AppointmentRecord> list = queryAppointmentDao.findAppointmentPage(page, record, orderBy, search,startTime, endTime);
+        List<AppointmentRecord> list = queryAppointmentDao.findAppointmentPage(page, record, orderBy,type,search,startTime,endTime);
 
         /// 检查待到店的 过期状态，并同时更新状态
         Calendar today = Calendar.getInstance();
