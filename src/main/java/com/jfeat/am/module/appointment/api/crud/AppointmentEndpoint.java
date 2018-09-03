@@ -97,14 +97,14 @@ public class AppointmentEndpoint extends BaseController {
                     entity.setStatus(AppointmentStatus.PAY_PENDING.toString());
                 }
             }
-
+            entity.setFieldC(String.valueOf(new Date().getTime() + JWTKit.getUserId(getHttpServletRequest())));
             affected += appointmentService.createMaster(entity);
 
         } catch (DuplicateKeyException e) {
             throw new BusinessException(BusinessCode.DuplicateKey);
         }
 
-        return SuccessTip.create(entity.getCode());
+        return SuccessTip.create(affected);
     }
 
     @GetMapping("/{id}")

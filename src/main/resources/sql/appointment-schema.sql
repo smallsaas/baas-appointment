@@ -22,7 +22,8 @@ CREATE TABLE `t_appointment` (
   `receptionist_name` varchar(26) DEFAULT NULL COMMENT '接待员',
   `payment_timestamp` datetime DEFAULT NULL COMMENT '支付时间',
   `payment_method` varchar(26) DEFAULT NULL COMMENT '支付方试',
-  `field_c` varchar(100) DEFAULT NULL COMMENT '保留字段',
+  `field_c` varchar(100) not NULL COMMENT '保留字段---已使用，接收--预约编号(非预约码)',
   unique(`code`),
+  unique(`field_c`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
