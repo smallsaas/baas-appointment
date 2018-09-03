@@ -23,6 +23,7 @@
         <sb-base.version>1.0.0</sb-base.version>
         <sb-crud.version>1.0.4-SNAPSHOT</sb-crud.version>
         <sb-log.version>1.0.0</sb-log.version>
+        <sb-debug.version>1.0.0</sb-debug.version>
         <sb-field-config.version>1.2.0</sb-field-config.version>
         <sb-starter-test.version>1.0.0</sb-starter-test.version>
     </properties>
@@ -37,6 +38,11 @@
             <groupId>com.jfeat</groupId>
             <artifactId>sb-log</artifactId>
             <version>${sb-log.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>sb-debug</artifactId>
+            <version>${sb-debug.version}</version>
         </dependency>
         <dependency>
             <groupId>com.jfeat</groupId>

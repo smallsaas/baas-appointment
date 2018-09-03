@@ -33,10 +33,32 @@ public class AppointmentPersonalEndpoint extends BaseController {
     @Resource
     AppointmentService appointmentService;
 
+    @ApiOperation("我的店铺预约列表 支持两种状态 [WAIT_TO_STORE, DONE]")
+    @GetMapping("/appointment/b/appointments")
+    public Tip myStoreAppointments(Page<Appointment> page,
+                            @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                            @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                            @RequestParam(name = "itemId", required = true) Long itemId,
+                            @RequestParam(name = "status", required = false) String status
+    ){
+        if(status!=null && status.length()>0) {
+            if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status) ||
+                    "DONE".equals(status)) {
+                // ok
+            } else {
+                throw new BusinessException(BusinessCode.BadRequest.getCode(), "状态仅支持 [WAIT_TO_STORE, DONE]");
+            }
+        }
+
+        page.setCurrent(pageNum);
+        page.setSize(pageSize);
+        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status));
+        return SuccessTip.create(page);
+    }
 
     @ApiOperation("我的预约列表 支持两种状态 [WAIT_TO_STORE, DONE]")
     @GetMapping("/appointment/app/appointments")
-    public Tip appointments(Page<Appointment> page,
+    public Tip myAppointments(Page<Appointment> page,
                             @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                             @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                             @RequestParam(name = "status", required = true) String status

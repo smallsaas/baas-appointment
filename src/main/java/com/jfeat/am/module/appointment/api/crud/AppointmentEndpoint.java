@@ -75,7 +75,7 @@ public class AppointmentEndpoint extends BaseController {
                         ) {
                     /// OK
                 } else {
-                    throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE]");
+                    throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE_BANK]");
                 }
             }
         }
@@ -255,7 +255,8 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "status", required = false) String status,
                                  @RequestParam(name = "fee", required = false) BigDecimal fee,
                                  @RequestParam(name = "createTime", required = false) Date createTime,
-                                 @RequestParam(name = "appointmentTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date[] appointmentTime,
+                                 @RequestParam(name = "appointmentTime", required = false)
+                                     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date[] appointmentTime,
                                  @RequestParam(name = "closeTime", required = false) Date closeTime,
                                  @RequestParam(name = "memberPhone", required = false) String memberPhone,
                                  @RequestParam(name = "memberName", required = false) String memberName,
