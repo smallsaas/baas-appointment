@@ -14,12 +14,12 @@
         <if test="record.code != null and record.code!= ''">
             AND t_appointment.code LIKE CONCAT('%',#{record.code},'%')
         </if>
-        <if test="record.type != null and record.type!= ''">
+        <!--<if test="record.type != null and record.type!= ''">
             AND t_appointment.type = #{record.type}
-        </if>
+        </if>-->
 
         <if test="record.itemId != null and record.itemId>0 ">
-            AND t_appointment.item_id LIKE CONCAT('%',#{record.itemId},'%')
+            AND t_appointment.item_id = #{record.itemId}
         </if>
 
         <if test="record.itemName != null and record.itemName!= ''">
@@ -92,11 +92,23 @@
             AND t_appointment.field_c LIKE CONCAT('%',#{record.fieldC},'%')
         </if>
 
+        <if test="type != null and type.length > 0">
+            AND (
+                t_appointment.type LIKE CONCAT('%',#{type[0]},'%')
+                <if test="type.length == 2">
+                    OR t_appointment.type LIKE CONCAT('%',#{type[1]},'%')
+                </if>
+                <if test="type.length == 3">
+                    OR t_appointment.type LIKE CONCAT('%',#{type[2]},'%')
+                </if>
+            )
+        </if>
+
         <if test="search != null">
             AND (
-               t_appointment.code LIKE CONCAT('%',#{record.code},'%') OR
-               t_appointment.member_name LIKE CONCAT('%',#{record.memberName},'%') OR
-               t_appointment.receptionist_name LIKE CONCAT('%',#{record.receptionistName},'%')
+               t_appointment.code LIKE CONCAT('%',#{search},'%') OR
+               t_appointment.member_name LIKE CONCAT('%',#{search},'%') OR
+               t_appointment.receptionist_name LIKE CONCAT('%',#{search},'%')
             )
         </if>
 
