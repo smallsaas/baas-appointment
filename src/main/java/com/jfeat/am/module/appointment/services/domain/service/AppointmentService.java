@@ -19,5 +19,5 @@ public interface AppointmentService extends CRUDAppointmentService{
     /**
      * 我的店铺预约列表
      */
-    List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status);
+    List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status,Integer isAssigned);
 }

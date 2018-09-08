@@ -36,12 +36,13 @@ public class AppointmentPersonalEndpoint extends BaseController {
     @ApiOperation("我的店铺预约列表 支持两种状态 [WAIT_TO_STORE, DONE]")
     @GetMapping("/appointment/b/appointments")
     public Tip myStoreAppointments(Page<Appointment> page,
-                            @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                            @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                            @RequestParam(name = "itemId", required = true) Long itemId,
-                            @RequestParam(name = "status", required = false) String status
-    ){
-        if(status!=null && status.length()>0) {
+                                   @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                   @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                                   @RequestParam(name = "itemId", required = true) Long itemId,
+                                   @RequestParam(name = "status", required = false) String status,
+                                   @RequestParam(name = "isAssigned", required = true, defaultValue = "0") Integer isAssigned
+    ) {
+        if (status != null && status.length() > 0) {
             if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status) ||
                     "DONE".equals(status)) {
                 // ok
@@ -52,28 +53,28 @@ public class AppointmentPersonalEndpoint extends BaseController {
 
         page.setCurrent(pageNum);
         page.setSize(pageSize);
-        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status));
+        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status,isAssigned));
         return SuccessTip.create(page);
     }
 
     @ApiOperation("我的预约列表 支持两种状态 [WAIT_TO_STORE, DONE]")
     @GetMapping("/appointment/app/appointments")
     public Tip myAppointments(Page<Appointment> page,
-                            @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                            @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                            @RequestParam(name = "status", required = true) String status
-                            ){
-        if(AppointmentStatus.WAIT_TO_STORE.toString().equals(status) ||
-                "DONE".equals(status)){
+                              @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                              @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                              @RequestParam(name = "status", required = true) String status
+    ) {
+        if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status) ||
+                "DONE".equals(status)) {
             // ok
-        }else{
+        } else {
             throw new BusinessException(BusinessCode.BadRequest.getCode(), "状态仅支持 [WAIT_TO_STORE, DONE]");
         }
 
         page.setCurrent(pageNum);
         page.setSize(pageSize);
 
-        Long memberId =  JWTKit.getUserId(getHttpServletRequest());
+        Long memberId = JWTKit.getUserId(getHttpServletRequest());
         page.setRecords(appointmentService.myAppointments(page, memberId, status));
         return SuccessTip.create(page);
     }

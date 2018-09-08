@@ -57,14 +57,18 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
     /**
      * 店铺预约列表, 预约时间倒序
      * */
-    public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status){
+    public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status,Integer isAssigned){
         // check status must be WAIT_TO_STORE, DONE
         EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
         wrapper.eq(Appointment.ITEM_ID, itemId);
 
         if(status!=null) {
             if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
-                wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString());
+                if (isAssigned==1){
+                wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNotNull(Appointment.RECEPTIONIST_ID);
+                }else {
+                    wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNull(Appointment.RECEPTIONIST_ID);
+                }
 
             } else if ("DONE".equals(status)) {
                 wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
