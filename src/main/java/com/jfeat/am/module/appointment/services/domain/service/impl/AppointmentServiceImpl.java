@@ -57,8 +57,9 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
     /**
      * 店铺预约列表, 预约时间倒序
      * */
-    public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status,Integer isAssigned){
+    public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status,Integer isAssigned,String doneSituation){
         // check status must be WAIT_TO_STORE, DONE
+        // while done
         EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
         wrapper.eq(Appointment.ITEM_ID, itemId);
 
@@ -71,12 +72,18 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                 }
 
             } else if ("DONE".equals(status)) {
-                wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
-                        AppointmentStatus.ALREADY_TO_STORE.toString(),
-                        AppointmentStatus.MISS_TO_STORE.toString(),
-                        AppointmentStatus.CANCELLED.toString(),
-                        AppointmentStatus.EXPIRED.toString()
-                );
+                if (doneSituation==null||doneSituation.length()==0){
+                    wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
+                            AppointmentStatus.ALREADY_TO_STORE.toString(),
+                            AppointmentStatus.MISS_TO_STORE.toString(),
+                            AppointmentStatus.CANCELLED.toString(),
+                            AppointmentStatus.EXPIRED.toString()
+                    );
+
+                }else {
+                    wrapper.eq(Appointment.STATUS,doneSituation);
+                }
+
             }
         }
 

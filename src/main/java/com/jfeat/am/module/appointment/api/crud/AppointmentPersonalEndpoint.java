@@ -40,7 +40,8 @@ public class AppointmentPersonalEndpoint extends BaseController {
                                    @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                                    @RequestParam(name = "itemId", required = true) Long itemId,
                                    @RequestParam(name = "status", required = false) String status,
-                                   @RequestParam(name = "isAssigned", required = true, defaultValue = "0") Integer isAssigned
+                                   @RequestParam(name = "isAssigned", required = true, defaultValue = "0") Integer isAssigned,
+                                   @RequestParam(name = "doneSituation",required = false)String doneSituation
     ) {
         if (status != null && status.length() > 0) {
             if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status) ||
@@ -53,7 +54,7 @@ public class AppointmentPersonalEndpoint extends BaseController {
 
         page.setCurrent(pageNum);
         page.setSize(pageSize);
-        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status,isAssigned));
+        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status,isAssigned,doneSituation));
         return SuccessTip.create(page);
     }
 
