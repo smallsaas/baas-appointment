@@ -22,9 +22,9 @@ CREATE TABLE `t_appointment` (
   `receptionist_name` varchar(26) DEFAULT NULL COMMENT '接待员',
   `payment_timestamp` datetime DEFAULT NULL COMMENT '支付时间',
   `payment_method` varchar(26) DEFAULT NULL COMMENT '支付方试',
-  `earliest_time` datetime not NULL COMMENT '预约最早时间',
-  `latest_time` datetime not NULL COMMENT '预约最迟时间',
-  `field_c` varchar(100) not NULL COMMENT '保留字段---已使用，接收--预约编号(非预约码)',
+  `earliest_time` datetime DEFAULT NULL COMMENT '预约最早时间',
+  `latest_time` datetime DEFAULT NULL COMMENT '预约最迟时间',
+  `field_c` varchar(100) DEFAULT NULL COMMENT '保留字段---已使用，接收--DOB',
   unique(`code`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
