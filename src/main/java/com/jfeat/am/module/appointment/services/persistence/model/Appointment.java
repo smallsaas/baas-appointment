@@ -137,10 +137,18 @@ public class Appointment extends Model<Appointment> {
     private String fieldC;
 
     /**
-     * 预约时间段
+     * 预约最早时间
      */
-    @TableField("quantum_time")
-    private String quantumTime;
+    @TableField("earliest_time")
+    private Date earliestTime;
+
+
+    /**
+     * 预约最迟时间
+     */
+    @TableField("latest_time")
+    private Date latestTime;
+
 
     public Long getId() {
         return id;
@@ -349,12 +357,20 @@ public class Appointment extends Model<Appointment> {
         return this;
     }
 
-    public String getQuantumTime() {
-        return quantumTime;
+    public Date getEarliestTime() {
+        return earliestTime;
     }
 
-    public void setQuantumTime(String quantumTime) {
-        this.quantumTime = quantumTime;
+    public void setEarliestTime(Date earliestTime) {
+        this.earliestTime = earliestTime;
+    }
+
+    public Date getLatestTime() {
+        return latestTime;
+    }
+
+    public void setLatestTime(Date latestTime) {
+        this.latestTime = latestTime;
     }
 
     public static final String ID = "id";
@@ -403,7 +419,9 @@ public class Appointment extends Model<Appointment> {
 
     public static final String FIELD_C = "field_c";
 
-    public static final String QUANTUM_TIME = "field_c";
+    public static final String EARLIEST_TIME = "earliest_time";
+
+    public static final String LATEST_TIME = "latest_time";
 
     @Override
     protected Serializable pkVal() {
@@ -436,7 +454,8 @@ public class Appointment extends Model<Appointment> {
                 ", paymentTimestamp=" + paymentTimestamp +
                 ", paymentMethod=" + paymentMethod +
                 ", fieldC=" + fieldC +
-                ", quantumTime=" + quantumTime +
+                ", earliestTime=" + earliestTime +
+                ", latestTime=" + latestTime +
                 "}";
     }
 }
