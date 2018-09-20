@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.baomidou.mybatisplus.enums.IdType;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -140,14 +141,14 @@ public class Appointment extends Model<Appointment> {
      * 预约最早时间
      */
     @TableField("earliest_time")
-    private Date earliestTime;
+    private Time earliestTime;
 
 
     /**
      * 预约最迟时间
      */
     @TableField("latest_time")
-    private Date latestTime;
+    private Time latestTime;
 
 
     public Long getId() {
@@ -361,7 +362,7 @@ public class Appointment extends Model<Appointment> {
         return earliestTime;
     }
 
-    public void setEarliestTime(Date earliestTime) {
+    public void setEarliestTime(Time earliestTime) {
         this.earliestTime = earliestTime;
     }
 
@@ -369,7 +370,7 @@ public class Appointment extends Model<Appointment> {
         return latestTime;
     }
 
-    public void setLatestTime(Date latestTime) {
+    public void setLatestTime(Time latestTime) {
         this.latestTime = latestTime;
     }
 
