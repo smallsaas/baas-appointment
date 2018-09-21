@@ -57,22 +57,22 @@ public class AppointmentEndpoint extends BaseController {
     @ApiOperation(value = "新建预约", response = AppointmentModel.class)
     public Tip createAppointment(@RequestBody AppointmentModel entity) {
 
-        if(entity.getType()==null){
+        if (entity.getType() == null) {
             throw new BusinessException(BusinessCode.BadRequest.getCode(), "没有提交类型");
         }
 
         ///判断类型正确性
         String[] types = entity.getType().split("\\+");
-        if(types==null || types.length==0){
+        if (types == null || types.length == 0) {
             throw new BusinessException(BusinessCode.BadRequest.getCode(), "没有提交类型");
         }
 
-        for(String type : types) {
-            if(type!=null && type.length()>0) {
+        for (String type : types) {
+            if (type != null && type.length() > 0) {
                 if (type.equals(AppointmentType.SKIN.toString()) ||
                         type.equals(AppointmentType.DNA.toString()) ||
                         type.equals(AppointmentType.LIFE_BANK.toString())
-                        ) {
+                ) {
                     /// OK
                 } else {
                     throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE_BANK]");
@@ -81,7 +81,7 @@ public class AppointmentEndpoint extends BaseController {
         }
 
         //判断预约店铺名
-        if(entity.getItemId()==null || entity.getItemName()==null){
+        if (entity.getItemId() == null || entity.getItemName() == null) {
             throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约店铺不能为空");
         }
 
@@ -90,10 +90,10 @@ public class AppointmentEndpoint extends BaseController {
         entity.setMemberId(JWTKit.getUserId(getHttpServletRequest()));
         try {
 
-            if(entity.getStatus()==null) {
-                if (entity.getFee()==null || entity.getFee().compareTo(BigDecimal.ZERO)<=0 ) {
+            if (entity.getStatus() == null) {
+                if (entity.getFee() == null || entity.getFee().compareTo(BigDecimal.ZERO) <= 0) {
                     entity.setStatus(AppointmentStatus.WAIT_TO_STORE.toString());
-                }else{
+                } else {
                     entity.setStatus(AppointmentStatus.PAY_PENDING.toString());
                 }
             }
@@ -121,7 +121,7 @@ public class AppointmentEndpoint extends BaseController {
         Appointment appointment = appointmentService.retrieveMaster(id);
         Long userId = JWTKit.getUserId(getHttpServletRequest());
         if (!appointment.getMemberId().equals(userId) ||
-                !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)){
+                !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)) {
             throw new BusinessException(BusinessCode.NoPermission);
         }
 
@@ -136,15 +136,15 @@ public class AppointmentEndpoint extends BaseController {
     @PostMapping("/{id}/action/pay")
     @ApiOperation(value = "支付预约", response = PaymentRequest.class)
     public Tip payAppointment(@PathVariable Long id, @RequestBody PaymentRequest payment) {
-        if(payment==null || payment.getMethod()==null || payment.getTimestamp()==null){
+        if (payment == null || payment.getMethod() == null || payment.getTimestamp() == null) {
             throw new BusinessException(BusinessCode.BadRequest);
         }
-        if(payment.getMethod().equals(PaymentMethods.ALIPAY.toString()) ||
+        if (payment.getMethod().equals(PaymentMethods.ALIPAY.toString()) ||
                 payment.getMethod().equals(PaymentMethods.WECHAT.toString()) ||
                 payment.getMethod().equals(PaymentMethods.CASH.toString())
-                ){
+        ) {
             // ok
-        }else{
+        } else {
             return ErrorTip.create(BusinessCode.BadRequest.getCode(), "参数错误 - 支付方法 Only [ALIPAY,WECHAT,CASH]");
         }
 
@@ -182,7 +182,7 @@ public class AppointmentEndpoint extends BaseController {
     @ApiOperation("改变预约状态 - 取消预约(APP)")
     public Tip cancelAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
-        if(appointment.getStatus().equals(AppointmentStatus.PAY_PENDING.toString()) ||
+        if (appointment.getStatus().equals(AppointmentStatus.PAY_PENDING.toString()) ||
                 appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.CANCELLED.toString());
             appointment.setId(id);
@@ -198,7 +198,7 @@ public class AppointmentEndpoint extends BaseController {
     public Tip checkAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
 
-        if(appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
+        if (appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.ALREADY_TO_STORE.toString());
             appointment.setId(id);
             return SuccessTip.create(appointmentService.updateMaster(appointment));
@@ -214,7 +214,7 @@ public class AppointmentEndpoint extends BaseController {
     public Tip changeAppointmentStatus_miss(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
 
-        if(appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
+        if (appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.MISS_TO_STORE.toString());
             appointment.setId(id);
             return SuccessTip.create(appointmentService.updateMaster(appointment));
@@ -224,15 +224,14 @@ public class AppointmentEndpoint extends BaseController {
     }
 
 
-
     @BusinessLog(name = "Appointment", value = "delete Appointment")
     @DeleteMapping("/{id}")
     @ApiOperation("删除预约详情")
     public Tip deleteAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
         Long userId = JWTKit.getUserId(getHttpServletRequest());
-        if (!appointment.getMemberId().equals(userId) ||
-                !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)){
+        if (appointment.getMemberId().compareTo(userId) != 0 ||
+                !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)) {
             throw new BusinessException(BusinessCode.NoPermission);
         }
         return SuccessTip.create(appointmentService.deleteMaster(id));
@@ -256,7 +255,7 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "fee", required = false) BigDecimal fee,
                                  @RequestParam(name = "createTime", required = false) Date createTime,
                                  @RequestParam(name = "appointmentTime", required = false)
-                                     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date[] appointmentTime,
+                                 @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date[] appointmentTime,
                                  @RequestParam(name = "closeTime", required = false) Date closeTime,
                                  @RequestParam(name = "memberPhone", required = false) String memberPhone,
                                  @RequestParam(name = "memberName", required = false) String memberName,
@@ -281,7 +280,7 @@ public class AppointmentEndpoint extends BaseController {
                 sort = "ASC";
             }
             orderBy = "`" + orderBy + "`" + " " + sort;
-        }else{
+        } else {
             /// default order by appointmentTime
             orderBy = "`appointment_time` DESC";
         }
@@ -292,12 +291,12 @@ public class AppointmentEndpoint extends BaseController {
         AppointmentRecord record = new AppointmentRecord();
         record.setId(id);
         record.setCode(code);
-        if(type!=null && type.length>0) {
-            for(String t : type) {
+        if (type != null && type.length > 0) {
+            for (String t : type) {
                 if (t.equals(AppointmentType.SKIN.toString()) ||
                         t.equals(AppointmentType.DNA.toString()) ||
                         t.equals(AppointmentType.LIFE_BANK.toString())
-                        ) {
+                ) {
                     // ok
                 } else {
                     throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE_BANK] " + t);
@@ -326,18 +325,20 @@ public class AppointmentEndpoint extends BaseController {
         record.setFieldC(fieldC);
         record.setPaymentMethod(paymentMethod);
 
-        Date startTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[0] : null;
-        Date endTime = (appointmentTime!=null && appointmentTime.length == 2)? appointmentTime[1] : null;
+        Date startTime = (appointmentTime != null && appointmentTime.length == 2) ? appointmentTime[0] : null;
+        Date endTime = (appointmentTime != null && appointmentTime.length == 2) ? appointmentTime[1] : null;
 
-        List<AppointmentRecord> list = queryAppointmentDao.findAppointmentPage(page, record, orderBy,type,search,startTime,endTime);
+        List<AppointmentRecord> list = queryAppointmentDao.findAppointmentPage(page, record, orderBy, type, search, startTime, endTime);
 
         /// 检查待到店的 过期状态，并同时更新状态
         Calendar today = Calendar.getInstance();
         today.add(Calendar.DAY_OF_YEAR, 1);
-        today.clear(Calendar.HOUR); today.clear(Calendar.MINUTE); today.clear(Calendar.SECOND);
+        today.clear(Calendar.HOUR);
+        today.clear(Calendar.MINUTE);
+        today.clear(Calendar.SECOND);
         Date todayDate = today.getTime();
-        for (AppointmentRecord r : list){
-            if(r.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
+        for (AppointmentRecord r : list) {
+            if (r.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
                 if (r.getAppointmentTime().compareTo(todayDate) <= 0) {
                     r.setStatus(AppointmentStatus.EXPIRED.toString());
                     appointmentService.updateMaster(r);
