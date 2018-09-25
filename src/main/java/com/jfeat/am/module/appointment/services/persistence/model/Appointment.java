@@ -141,7 +141,7 @@ public class Appointment extends Model<Appointment> {
      * 预约最早时间
      */
     @TableField("earliest_time")
-    private Time earliestTime;
+    private Date earliestTime;
 
 
     /**
