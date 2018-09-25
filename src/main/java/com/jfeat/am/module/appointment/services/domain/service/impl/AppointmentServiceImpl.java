@@ -36,7 +36,7 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
         wrapper.eq(Appointment.MEMBER_ID, memberId);
 
         if(AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
-            wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString());
+            wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).orderBy(Appointment.CREATE_TIME,false);
 
         }else if("DONE".equals(status)){
             wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
@@ -44,10 +44,8 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                     AppointmentStatus.MISS_TO_STORE.toString(),
                     AppointmentStatus.CANCELLED.toString(),
                     AppointmentStatus.EXPIRED.toString()
-                    );
+                    ).orderBy(Appointment.CLOSE_TIME,false);
         }
-
-        wrapper.orderBy(Appointment.APPOINTMENT_TIME, false);
 
         List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);
         return appointments;

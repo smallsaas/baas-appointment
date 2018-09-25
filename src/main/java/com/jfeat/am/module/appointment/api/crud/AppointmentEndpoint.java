@@ -141,11 +141,13 @@ public class AppointmentEndpoint extends BaseController {
         }
         if (payment.getMethod().equals(PaymentMethods.ALIPAY.toString()) ||
                 payment.getMethod().equals(PaymentMethods.WECHAT.toString()) ||
-                payment.getMethod().equals(PaymentMethods.CASH.toString())
+                payment.getMethod().equals(PaymentMethods.CASH.toString()) ||
+                payment.getMethod().equals(PaymentMethods.WALLET.toString())||
+                payment.getMethod().equals(PaymentMethods.CARD.toString())
         ) {
             // ok
         } else {
-            return ErrorTip.create(BusinessCode.BadRequest.getCode(), "参数错误 - 支付方法 Only [ALIPAY,WECHAT,CASH]");
+            return ErrorTip.create(BusinessCode.BadRequest.getCode(), "参数错误 - 支付方法 Only [ALIPAY|WECHAT|CASH|CARD|WALLET]");
         }
 
         Appointment appointment = appointmentService.retrieveMaster(id);
