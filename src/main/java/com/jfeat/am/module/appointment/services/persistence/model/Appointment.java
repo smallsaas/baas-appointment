@@ -150,13 +150,6 @@ public class Appointment extends Model<Appointment> {
     @TableField("latest_time")
     private Time latestTime;
 
-    /**
-     * 预约最迟时间
-     */
-    @TableField("is_deleted")
-    private Integer isDeleted;
-
-
     public Long getId() {
         return id;
     }
@@ -362,14 +355,6 @@ public class Appointment extends Model<Appointment> {
     public Appointment setFieldC(String fieldC) {
         this.fieldC = fieldC;
         return this;
-    }
-
-    public Integer getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
     }
 
     public Date getEarliestTime() {

@@ -25,7 +25,6 @@ CREATE TABLE `t_appointment` (
   `earliest_time` datetime DEFAULT NULL COMMENT '预约最早时间',
   `latest_time` datetime DEFAULT NULL COMMENT '预约最迟时间',
   `field_c` varchar(100) DEFAULT NULL COMMENT '保留字段---已使用，接收--DOB',
-  `is_deleted` smallint NOT NULL default 0 COMMENT ' 逻辑删除',
   unique(`code`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
