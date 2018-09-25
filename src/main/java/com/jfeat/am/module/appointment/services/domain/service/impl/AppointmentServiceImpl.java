@@ -42,7 +42,6 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
                     AppointmentStatus.ALREADY_TO_STORE.toString(),
                     AppointmentStatus.MISS_TO_STORE.toString(),
-                    AppointmentStatus.CANCELLED.toString(),
                     AppointmentStatus.EXPIRED.toString()
                     ).orderBy(Appointment.CLOSE_TIME,false);
         }
