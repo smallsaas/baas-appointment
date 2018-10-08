@@ -1,12 +1,15 @@
 package com.jfeat.am.module.appointment.api.crud;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jfeat.am.common.annotation.Permission;
 import com.jfeat.am.common.constant.tips.SuccessTip;
 import com.jfeat.am.common.constant.tips.Tip;
 import com.jfeat.am.common.controller.BaseController;
 import com.jfeat.am.common.exception.BusinessCode;
 import com.jfeat.am.common.exception.BusinessException;
 import com.jfeat.am.core.jwt.JWTKit;
+import com.jfeat.am.core.shiro.ShiroKit;
+import com.jfeat.am.module.appointment.api.permission.AppointmentPermission;
 import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
@@ -41,7 +44,8 @@ public class AppointmentPersonalEndpoint extends BaseController {
                                    @RequestParam(name = "itemId", required = true) Long itemId,
                                    @RequestParam(name = "status", required = false) String status,
                                    @RequestParam(name = "isAssigned", required = true, defaultValue = "0") Integer isAssigned,
-                                   @RequestParam(name = "doneSituation",required = false)String doneSituation
+                                   @RequestParam(name = "doneSituation",required = false)String doneSituation,
+                                   @RequestParam(name = "type",required = false)String type
     ) {
         if (status != null && status.length() > 0) {
             if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status) ||
@@ -54,7 +58,7 @@ public class AppointmentPersonalEndpoint extends BaseController {
 
         page.setCurrent(pageNum);
         page.setSize(pageSize);
-        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status,isAssigned,doneSituation));
+        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status,isAssigned,doneSituation,type));
         return SuccessTip.create(page);
     }
 

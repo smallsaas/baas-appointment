@@ -55,11 +55,13 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
     /**
      * 店铺预约列表, 预约时间倒序
      * */
-    public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status,Integer isAssigned,String doneSituation){
+    public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status,Integer isAssigned,String doneSituation,String type){
         // check status must be WAIT_TO_STORE, DONE
         // while done
         EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
         wrapper.eq(Appointment.ITEM_ID, itemId);
+
+
 
         if(status!=null) {
             if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
@@ -83,6 +85,9 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                 }
 
             }
+        }
+        if (type!=null){
+            wrapper.like(Appointment.TYPE,type);
         }
 
         wrapper.orderBy(Appointment.APPOINTMENT_TIME, false);
