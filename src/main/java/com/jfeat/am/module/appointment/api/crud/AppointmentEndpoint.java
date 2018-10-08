@@ -239,6 +239,18 @@ public class AppointmentEndpoint extends BaseController {
         return SuccessTip.create(appointmentService.deleteMaster(id));
     }
 
+    @BusinessLog(name = "Appointment", value = "delete Appointment")
+    @DeleteMapping("/app/{id}")
+    @ApiOperation("删除预约详情 无需权限检查")
+    public Tip deleteAppointmentWithoutPermission(@PathVariable Long id) {
+        Appointment appointment = appointmentService.retrieveMaster(id);
+        Long userId = JWTKit.getUserId(getHttpServletRequest());
+        if (appointment.getMemberId().compareTo(userId) != 0) {
+            throw new BusinessException(BusinessCode.NoPermission);
+        }
+        return SuccessTip.create(appointmentService.deleteMaster(id));
+    }
+
     @GetMapping
     @ApiOperation("查询预约列表")
     public Tip queryAppointments(Page<AppointmentRecord> page,

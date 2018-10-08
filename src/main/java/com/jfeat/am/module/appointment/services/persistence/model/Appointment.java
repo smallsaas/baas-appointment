@@ -141,21 +141,14 @@ public class Appointment extends Model<Appointment> {
      * 预约最早时间
      */
     @TableField("earliest_time")
-    private Time earliestTime;
+    private Date earliestTime;
 
 
     /**
      * 预约最迟时间
      */
     @TableField("latest_time")
-    private Time latestTime;
-
-    /**
-     * 预约最迟时间
-     */
-    @TableField("is_deleted")
-    private Integer isDeleted;
-
+    private Date latestTime;
 
     public Long getId() {
         return id;
@@ -364,19 +357,11 @@ public class Appointment extends Model<Appointment> {
         return this;
     }
 
-    public Integer getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
     public Date getEarliestTime() {
         return earliestTime;
     }
 
-    public void setEarliestTime(Time earliestTime) {
+    public void setEarliestTime(Date earliestTime) {
         this.earliestTime = earliestTime;
     }
 
@@ -384,7 +369,7 @@ public class Appointment extends Model<Appointment> {
         return latestTime;
     }
 
-    public void setLatestTime(Time latestTime) {
+    public void setLatestTime(Date latestTime) {
         this.latestTime = latestTime;
     }
 
