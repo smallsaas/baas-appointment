@@ -94,12 +94,12 @@
 
         <if test="type != null and type.length > 0">
             AND (
-                t_appointment.type LIKE CONCAT('%',#{type[0]},'%')
+                t_appointment.type = #{type[0]}
                 <if test="type.length == 2">
-                    OR t_appointment.type LIKE CONCAT('%',#{type[1]},'%')
+                    OR t_appointment.type = #{type[1]}
                 </if>
                 <if test="type.length == 3">
-                    OR t_appointment.type LIKE CONCAT('%',#{type[2]},'%')
+                    OR t_appointment.type = #{type[2]}
                 </if>
             )
         </if>
