@@ -12,7 +12,7 @@ import com.jfeat.am.core.shiro.ShiroKit;
 import com.jfeat.am.module.appointment.api.permission.AppointmentPermission;
 import com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentDao;
 import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
-import com.jfeat.am.module.appointment.services.domain.definition.AppointmentType;
+import com.jfeat.am.module.appointment.services.domain.definition.AppointmentTypeItem;
 import com.jfeat.am.module.appointment.services.domain.definition.PaymentMethods;
 import com.jfeat.am.module.appointment.services.domain.model.AppointmentModel;
 import com.jfeat.am.module.appointment.services.domain.model.AppointmentRecord;
@@ -69,9 +69,9 @@ public class AppointmentEndpoint extends BaseController {
 
         for (String type : types) {
             if (type != null && type.length() > 0) {
-                if (type.equals(AppointmentType.SKIN.toString()) ||
-                        type.equals(AppointmentType.DNA.toString()) ||
-                        type.equals(AppointmentType.LIFE_BANK.toString())
+                if (type.equals(AppointmentTypeItem.SKIN.toString()) ||
+                        type.equals(AppointmentTypeItem.DNA.toString()) ||
+                        type.equals(AppointmentTypeItem.LIFE_BANK.toString())
                 ) {
                     /// OK
                 } else {
@@ -307,9 +307,9 @@ public class AppointmentEndpoint extends BaseController {
         record.setCode(code);
         if (type != null && type.length > 0) {
             for (String t : type) {
-                if (t.equals(AppointmentType.SKIN.toString()) ||
-                        t.equals(AppointmentType.DNA.toString()) ||
-                        t.equals(AppointmentType.LIFE_BANK.toString())
+                if (t.equals(AppointmentTypeItem.SKIN.toString()) ||
+                        t.equals(AppointmentTypeItem.DNA.toString()) ||
+                        t.equals(AppointmentTypeItem.LIFE_BANK.toString())
                 ) {
                     // ok
                 } else {

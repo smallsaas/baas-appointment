@@ -28,3 +28,25 @@ CREATE TABLE `t_appointment` (
   unique(`code`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+DROP TABLE IF EXISTS `t_appointment_type`;
+CREATE TABLE `t_appointment_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `type` varchar(100) NOT NULL COMMENT ' 预约类型',
+  `status` varchar(20) NOT NULL COMMENT ' 状态',
+  `fee` decimal(10,2) default NULL COMMENT '费用',
+  unique(`type`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `t_store_appointment_type`;
+CREATE TABLE `t_store_appointment_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `store_id` bigint(20) NOT NULL COMMENT ' 店铺ID',
+  `appointment_type_id` bigint(20) NOT NULL COMMENT '预约项目的ID',
+  unique(`store_id`,`appointment_type_id`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
