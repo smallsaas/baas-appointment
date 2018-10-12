@@ -3,6 +3,7 @@ package com.jfeat.am.module.appointment.services.domain.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentTypeDao;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentTypeService;
 import com.jfeat.am.module.appointment.services.persistence.dao.AppointmentTypeMapper;
 import com.jfeat.am.module.appointment.services.persistence.model.AppointmentType;
@@ -16,6 +17,9 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
 
     @Resource
     AppointmentTypeMapper appointmentTypeMapper;
+
+    @Resource
+    QueryAppointmentTypeDao queryAppointmentTypeDao;
 
 
     public Integer createAppointmentType(AppointmentType entity){
@@ -50,4 +54,10 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
         }
 
     }
+
+    public List<AppointmentType> findAppointmentType(Long storeId){
+
+        return queryAppointmentTypeDao.findAppointmentType(storeId);
+    }
+
 }

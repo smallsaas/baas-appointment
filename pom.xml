@@ -277,14 +277,15 @@
                 <version>1.2.2</version>
                 <configuration>
                     <moduleName>appointment</moduleName>
-                    <dbUrl>jdbc:mysql://192.168.2.8/test?characterEncoding=utf-8</dbUrl>
+                    <dbUrl>jdbc:mysql://120.79.77.207:3306/mall?characterEncoding=utf-8</dbUrl>
                     <username>root</username>
                     <password>root</password>
                     <parentPackage>com.jfeat.am.module</parentPackage>
                     <outputDir>src/main/java</outputDir>
                     <initialize>true</initialize>
                     <tables>
-                        <table>t_appointment</table>
+                        <table>t_appointment_type</table>
+                        <table>t_store_appointment_type</table>
                     </tables>
                 </configuration>
             </plugin>

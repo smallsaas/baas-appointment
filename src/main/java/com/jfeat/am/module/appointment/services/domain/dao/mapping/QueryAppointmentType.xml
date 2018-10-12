@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentTypeDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.jfeat.am.module.appointment.services.persistence.model.AppointmentType">
+		<id column="id" property="id" />
+		<result column="type" property="type" />
+		<result column="status" property="status" />
+		<result column="fee" property="fee" />
+	</resultMap>
+
+
+
+	<select id="findAppointmentType" resultMap="BaseResultMap" parameterType="long">
+	SELECT t_appointment_type.*
+	FROM t_appointment_type
+		left join t_store_appointment_type on t_store_appointment_type.appointment_type_id = t_appointment_type.id
+		left join t_store on t_store_appointment_type.store_id = t_store.id
+	WHERE 1=1
+	and
+		t_store.id = #{stroeId}
+	</select>
+</mapper>

@@ -19,4 +19,7 @@ public interface AppointmentTypeService {
 
 
     public List<AppointmentType> appointmentType(Page<AppointmentType> page, String name);
+
+
+    public List<AppointmentType> findAppointmentType(Long storeId);
 }
