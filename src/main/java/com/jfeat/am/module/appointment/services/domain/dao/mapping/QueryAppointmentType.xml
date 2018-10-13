@@ -19,6 +19,6 @@
 		left join t_store on t_store_appointment_type.store_id = t_store.id
 	WHERE 1=1
 	and
-		t_store.id = #{stroeId}
+		t_store.id = #{storeId}
 	</select>
 </mapper>
