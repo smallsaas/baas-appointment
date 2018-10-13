@@ -41,7 +41,7 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
     }
 
     public List<AppointmentType> appointmentType(Page<AppointmentType> page,String name){
-        if (name!=null||name.length()>0){
+        if (name!=null&&name.length()>0){
 
             List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
                     new EntityWrapper<AppointmentType>().eq("type",name));
