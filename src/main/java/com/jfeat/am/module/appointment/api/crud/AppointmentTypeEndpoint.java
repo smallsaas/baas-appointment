@@ -32,6 +32,15 @@ public class AppointmentTypeEndpoint extends BaseController {
 
     }
 
+    @BusinessLog(name = "AppointmentType", value = "create AppointmentType")
+    @GetMapping("/{id}")
+    @ApiOperation(value = "查看预约类型", response = AppointmentType.class)
+    public Tip showAppointment(@PathVariable Long id) {
+
+        return SuccessTip.create(appointmentTypeService.showAppointmentType(id));
+
+    }
+
 
     @BusinessLog(name = "AppointmentType", value = "create AppointmentType")
     @PutMapping("/{id}")

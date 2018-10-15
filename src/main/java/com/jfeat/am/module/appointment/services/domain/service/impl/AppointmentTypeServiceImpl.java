@@ -29,6 +29,13 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
     }
 
 
+    public AppointmentType showAppointmentType(Long id){
+
+
+        return appointmentTypeMapper.selectById(id);
+    }
+
+
     public Integer updateAppointmentType(Long id,AppointmentType entity){
         entity.setId(id);
         return appointmentTypeMapper.updateById(entity);

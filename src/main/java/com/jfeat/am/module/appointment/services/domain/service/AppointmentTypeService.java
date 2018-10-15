@@ -9,17 +9,19 @@ public interface AppointmentTypeService {
 
 
 
-    public Integer createAppointmentType(AppointmentType entity);
+    Integer createAppointmentType(AppointmentType entity);
+
+    AppointmentType showAppointmentType(Long id);
 
 
-    public Integer updateAppointmentType(Long id,AppointmentType entity);
+    Integer updateAppointmentType(Long id,AppointmentType entity);
 
 
-    public Integer deleteAppointmentType(Long id);
+    Integer deleteAppointmentType(Long id);
 
 
-    public List<AppointmentType> appointmentType(Page<AppointmentType> page, String name);
+    List<AppointmentType> appointmentType(Page<AppointmentType> page, String name);
 
 
-    public List<AppointmentType> findAppointmentType(Long storeId);
+    List<AppointmentType> findAppointmentType(Long storeId);
 }
