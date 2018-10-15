@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 @RestController
-@Api("预约管理")
+@Api("预约类型管理")
 @RequestMapping("/api/appointment/items")
 public class AppointmentTypeEndpoint extends BaseController {
 

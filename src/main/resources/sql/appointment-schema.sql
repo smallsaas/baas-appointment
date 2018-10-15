@@ -35,7 +35,7 @@ DROP TABLE IF EXISTS `t_appointment_type`;
 CREATE TABLE `t_appointment_type` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `type` varchar(100) NOT NULL COMMENT ' 预约类型',
-  `status` varchar(20) NOT NULL COMMENT ' 状态',
+  `status` varchar(20) NOT NULL default '1' COMMENT ' 状态',
   `fee` decimal(10,2) default NULL COMMENT '费用',
   unique(`type`),
   PRIMARY KEY (`id`)
