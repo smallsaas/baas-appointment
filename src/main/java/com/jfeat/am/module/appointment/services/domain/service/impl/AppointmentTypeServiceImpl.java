@@ -47,15 +47,15 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
 
     }
 
-    public List<AppointmentType> appointmentType(Page<AppointmentType> page,String name){
+    public List<AppointmentType> appointmentType(Page<AppointmentType> page,String name,String status){
         if (name!=null&&name.length()>0){
 
             List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
-                    new EntityWrapper<AppointmentType>().eq("type",name));
+                    new EntityWrapper<AppointmentType>().eq("type",name).eq("status",status));
             return types;
         }else {
             List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
-                    new EntityWrapper<AppointmentType>());
+                    new EntityWrapper<AppointmentType>().eq("status",status));
             return types;
 
         }

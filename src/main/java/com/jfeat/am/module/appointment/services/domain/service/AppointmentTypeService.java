@@ -20,7 +20,7 @@ public interface AppointmentTypeService {
     Integer deleteAppointmentType(Long id);
 
 
-    List<AppointmentType> appointmentType(Page<AppointmentType> page, String name);
+    List<AppointmentType> appointmentType(Page<AppointmentType> page, String name,String status);
 
 
     List<AppointmentType> findAppointmentType(Long storeId);

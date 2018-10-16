@@ -68,13 +68,15 @@ public class AppointmentTypeEndpoint extends BaseController {
     public Tip getAppointment(Page<AppointmentType> page,
                               @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                               @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                              @RequestParam(name = "name", required = false) String name
+                              @RequestParam(name = "name", required = false) String name,
+                              @RequestParam(name = "status", required = true,defaultValue = "1") String status
+
     ) {
 
         page.setCurrent(pageNum);
         page.setSize(pageSize);
 
-        page.setRecords(appointmentTypeService.appointmentType(page, name));
+        page.setRecords(appointmentTypeService.appointmentType(page, name,status));
 
         return SuccessTip.create(page);
 
