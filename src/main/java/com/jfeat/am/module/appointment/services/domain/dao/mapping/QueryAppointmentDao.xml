@@ -92,7 +92,13 @@
             AND t_appointment.field_c LIKE CONCAT('%',#{record.fieldC},'%')
         </if>
 
-        <if test="type != null and type.length > 0">
+        <if test="type != null and type!= ''">
+            AND t_appointment.type LIKE CONCAT('%',#{type},'%')
+        </if>
+
+
+
+<!--        <if test="type != null and type.length > 0">
             AND (
                 t_appointment.type = #{type[0]}
                 <if test="type.length == 2">
@@ -102,7 +108,7 @@
                     OR t_appointment.type = #{type[2]}
                 </if>
             )
-        </if>
+        </if>-->
 
         <if test="search != null">
             AND (

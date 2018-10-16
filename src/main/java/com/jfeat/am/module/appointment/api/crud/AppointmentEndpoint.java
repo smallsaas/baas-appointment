@@ -258,7 +258,7 @@ public class AppointmentEndpoint extends BaseController {
                                  @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                                  @RequestParam(name = "id", required = false) Long id,
                                  @RequestParam(name = "code", required = false) String code,
-                                 @RequestParam(name = "type", required = false) String[] type,
+                                 @RequestParam(name = "type", required = false) String type,
                                  @RequestParam(name = "itemId", required = false) Long itemId,
                                  @RequestParam(name = "itemName", required = false) String itemName,
                                  @RequestParam(name = "itemAddress", required = false) String itemAddress,
@@ -305,7 +305,7 @@ public class AppointmentEndpoint extends BaseController {
         AppointmentRecord record = new AppointmentRecord();
         record.setId(id);
         record.setCode(code);
-        if (type != null && type.length > 0) {
+        /*if (type != null && type.length > 0) {
             for (String t : type) {
                 if (t.equals(AppointmentTypeItem.SKIN.toString()) ||
                         t.equals(AppointmentTypeItem.DNA.toString()) ||
@@ -316,7 +316,7 @@ public class AppointmentEndpoint extends BaseController {
                     throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE_BANK] " + t);
                 }
             }
-        }
+        }*/
 
         record.setItemId(itemId);
         record.setItemName(itemName);
