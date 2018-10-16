@@ -62,7 +62,7 @@ public class AppointmentEndpoint extends BaseController {
         }
 
         ///判断类型正确性
-        String[] types = entity.getType().split("\\+");
+        /*String[] types = entity.getType().split("\\+");
         if (types == null || types.length == 0) {
             throw new BusinessException(BusinessCode.BadRequest.getCode(), "没有提交类型");
         }
@@ -78,7 +78,7 @@ public class AppointmentEndpoint extends BaseController {
                     throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约类型 only [SKIN, DNA, LIFE_BANK]");
                 }
             }
-        }
+        }*/
 
         //判断预约店铺名
         if (entity.getItemId() == null || entity.getItemName() == null) {
