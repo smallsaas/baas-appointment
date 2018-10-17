@@ -31,7 +31,7 @@ public class AppointmentType extends Model<AppointmentType> {
     /**
      *  状态
      */
-	private String status;
+	private Integer status;
     /**
      * 费用
      */
@@ -56,11 +56,11 @@ public class AppointmentType extends Model<AppointmentType> {
 		return this;
 	}
 
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public AppointmentType setStatus(String status) {
+	public AppointmentType setStatus(Integer status) {
 		this.status = status;
 		return this;
 	}

@@ -22,47 +22,61 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
     QueryAppointmentTypeDao queryAppointmentTypeDao;
 
 
-    public Integer createAppointmentType(AppointmentType entity){
+    public Integer createAppointmentType(AppointmentType entity) {
 
 
         return appointmentTypeMapper.insert(entity);
     }
 
 
-    public AppointmentType showAppointmentType(Long id){
+    public AppointmentType showAppointmentType(Long id) {
 
 
         return appointmentTypeMapper.selectById(id);
     }
 
 
-    public Integer updateAppointmentType(Long id,AppointmentType entity){
+    public Integer updateAppointmentType(Long id, AppointmentType entity) {
         entity.setId(id);
         return appointmentTypeMapper.updateById(entity);
     }
 
 
-    public Integer deleteAppointmentType(Long id){
+    public Integer deleteAppointmentType(Long id) {
         return appointmentTypeMapper.deleteById(id);
 
     }
 
-    public List<AppointmentType> appointmentType(Page<AppointmentType> page,String name,String status){
-        if (name!=null&&name.length()>0){
+    public List<AppointmentType> appointmentType(Page<AppointmentType> page, String name, String status) {
+        if (status == null) {
+            if (name != null && name.length() > 0) {
 
-            List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
-                    new EntityWrapper<AppointmentType>().eq("type",name).eq("status",status));
-            return types;
-        }else {
-            List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
-                    new EntityWrapper<AppointmentType>().eq("status",status));
-            return types;
+                List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
+                        new EntityWrapper<AppointmentType>().eq("type", name));
+                return types;
+            } else {
+                List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
+                        new EntityWrapper<AppointmentType>());
+                return types;
 
+            }
+
+        } else {
+            if (name != null && name.length() > 0) {
+
+                List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
+                        new EntityWrapper<AppointmentType>().eq("type", name).eq("status", status).orderBy(AppointmentType.STATUS,false));
+                return types;
+            } else {
+                List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
+                        new EntityWrapper<AppointmentType>().eq("status", status).orderBy(AppointmentType.STATUS,false));
+                return types;
+
+            }
         }
-
     }
 
-    public List<AppointmentType> findAppointmentType(Long storeId){
+    public List<AppointmentType> findAppointmentType(Long storeId) {
 
         return queryAppointmentTypeDao.findAppointmentType(storeId);
     }
