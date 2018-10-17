@@ -47,7 +47,7 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
 
     }
 
-    public List<AppointmentType> appointmentType(Page<AppointmentType> page, String name, String status) {
+    public List<AppointmentType> appointmentType(Page<AppointmentType> page, String name, Integer status) {
         if (status == null) {
             if (name != null && name.length() > 0) {
 

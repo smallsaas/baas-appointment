@@ -69,7 +69,7 @@ public class AppointmentTypeEndpoint extends BaseController {
                               @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                               @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                               @RequestParam(name = "name", required = false) String name,
-                              @RequestParam(name = "status", required = false) String status
+                              @RequestParam(name = "status", required = false) Integer status
 
     ) {
 
