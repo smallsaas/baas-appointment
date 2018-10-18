@@ -6,6 +6,7 @@ import com.jfeat.am.module.appointment.services.domain.service.StoreAppointmentT
 import com.jfeat.am.module.appointment.services.persistence.dao.StoreAppointmentTypeMapper;
 import com.jfeat.am.module.appointment.services.persistence.model.StoreAppointmentType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -18,10 +19,12 @@ public class StoreAppointmentTypeServiceImpl implements StoreAppointmentTypeServ
     StoreAppointmentTypeMapper storeAppointmentTypeMapper;
 
 
+    @Transactional
     public Integer addRelation(Long storeId, Ids ids){
 
         Integer affected = 0;
 
+        affected += storeAppointmentTypeMapper.delete(new EntityWrapper<StoreAppointmentType>().eq(StoreAppointmentType.STORE_ID,storeId));
         for (Long id : ids.getIds()){
             StoreAppointmentType relation = new StoreAppointmentType();
             relation.setStoreId(storeId);
@@ -38,6 +41,7 @@ public class StoreAppointmentTypeServiceImpl implements StoreAppointmentTypeServ
     }
 
 
+    @Transactional
     public Integer updateRelation(Long storeId, Ids ids){
 
         Integer affected = 0;
