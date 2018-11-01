@@ -2,6 +2,7 @@ package com.jfeat.am.module.appointment.services.persistence.model;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.enums.IdType;
 
 import java.math.BigDecimal;
@@ -141,6 +142,7 @@ public class Appointment extends Model<Appointment> {
      * 预约最早时间
      */
     @TableField("earliest_time")
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date earliestTime;
 
 
@@ -148,6 +150,7 @@ public class Appointment extends Model<Appointment> {
      * 预约最迟时间
      */
     @TableField("latest_time")
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date latestTime;
 
     public Long getId() {
