@@ -70,13 +70,13 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                             .like(Appointment.CODE, search)
                             .like(Appointment.MEMBER_NAME, search)
                             .like(Appointment.MEMBER_PHONE, search)
-                            .between(Appointment.APPOINTMENT_TIME,startTime==null?1970-01-01:startTime,endTime==null?new Date():endTime);
+                            .between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime,endTime==null?new Date():endTime);
                 } else {
                     wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNull(Appointment.RECEPTIONIST_ID)
                             .like(Appointment.CODE, search)
                             .like(Appointment.MEMBER_NAME, search)
                             .like(Appointment.MEMBER_PHONE, search)
-                            .between(Appointment.APPOINTMENT_TIME,startTime==null?1970-01-01:startTime,endTime==null?new Date():endTime);
+                            .between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime,endTime==null?new Date():endTime);
                 }
 
             } else if ("DONE".equals(status)) {
@@ -89,13 +89,13 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                     ).like(Appointment.CODE, search)
                             .like(Appointment.MEMBER_NAME, search)
                             .like(Appointment.MEMBER_PHONE, search)
-                            .between(Appointment.APPOINTMENT_TIME,startTime==null?1970-01-01:startTime,endTime==null?new Date():endTime);
+                            .between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime,endTime==null?new Date():endTime);
 
                 } else {
                     wrapper.eq(Appointment.STATUS, doneSituation).like(Appointment.CODE, search)
                             .like(Appointment.MEMBER_NAME, search)
                             .like(Appointment.MEMBER_PHONE, search)
-                            .between(Appointment.APPOINTMENT_TIME,startTime==null?1970-01-01:startTime,endTime==null?new Date():endTime);
+                            .between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime,endTime==null?new Date():endTime);
                 }
 
             }
