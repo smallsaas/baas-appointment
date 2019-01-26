@@ -15,9 +15,11 @@ import com.jfeat.am.module.appointment.services.domain.service.AppointmentServic
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 
 /**
@@ -44,8 +46,10 @@ public class AppointmentPersonalEndpoint extends BaseController {
                                    @RequestParam(name = "itemId", required = true) Long itemId,
                                    @RequestParam(name = "status", required = false) String status,
                                    @RequestParam(name = "isAssigned", required = true, defaultValue = "0") Integer isAssigned,
-                                   @RequestParam(name = "doneSituation",required = false)String doneSituation,
-                                   @RequestParam(name = "type",required = false)String type
+                                   @RequestParam(name = "doneSituation", required = false) String doneSituation,
+                                   @RequestParam(name = "type", required = false) String type,
+                                   @RequestParam(name = "search",required = false)String search,
+                                   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date[] appointmentTime
     ) {
         if (status != null && status.length() > 0) {
             if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status) ||
@@ -56,9 +60,11 @@ public class AppointmentPersonalEndpoint extends BaseController {
             }
         }
 
+        Date startTime = (appointmentTime != null && appointmentTime.length == 2) ? appointmentTime[0] : null;
+        Date endTime = (appointmentTime != null && appointmentTime.length == 2) ? appointmentTime[1] : null;
         page.setCurrent(pageNum);
         page.setSize(pageSize);
-        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status,isAssigned,doneSituation,type));
+        page.setRecords(appointmentService.myBusinessAppointments(page, itemId, status, isAssigned, doneSituation, type,search,startTime,endTime));
         return SuccessTip.create(page);
     }
 
