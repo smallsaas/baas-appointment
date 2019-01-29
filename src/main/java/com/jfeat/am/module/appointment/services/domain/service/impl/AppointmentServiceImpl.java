@@ -69,14 +69,12 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                     wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNotNull(Appointment.RECEPTIONIST_ID)
                             .like(Appointment.CODE, search)
                             .like(Appointment.MEMBER_NAME, search)
-                            .like(Appointment.MEMBER_PHONE, search)
-                            .between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime,endTime==null?new Date():endTime);
+                            .like(Appointment.MEMBER_PHONE, search);
                 } else {
                     wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNull(Appointment.RECEPTIONIST_ID)
                             .like(Appointment.CODE, search)
                             .like(Appointment.MEMBER_NAME, search)
-                            .like(Appointment.MEMBER_PHONE, search)
-                            .between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime,endTime==null?new Date():endTime);
+                            .like(Appointment.MEMBER_PHONE, search);
                 }
 
             } else if ("DONE".equals(status)) {
@@ -88,14 +86,12 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                             AppointmentStatus.EXPIRED.toString()
                     ).like(Appointment.CODE, search)
                             .like(Appointment.MEMBER_NAME, search)
-                            .like(Appointment.MEMBER_PHONE, search)
-                            .between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime,endTime==null?new Date():endTime);
+                            .like(Appointment.MEMBER_PHONE, search);
 
                 } else {
                     wrapper.eq(Appointment.STATUS, doneSituation).like(Appointment.CODE, search)
                             .like(Appointment.MEMBER_NAME, search)
-                            .like(Appointment.MEMBER_PHONE, search)
-                            .between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime,endTime==null?new Date():endTime);
+                            .like(Appointment.MEMBER_PHONE, search);
                 }
 
             }
@@ -104,6 +100,8 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             wrapper.eq(Appointment.TYPE, type);
         }
 
+        wrapper.between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime, endTime==null?new Date():endTime);
+        
         wrapper.orderBy(Appointment.APPOINTMENT_TIME, false);
 
         List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);
