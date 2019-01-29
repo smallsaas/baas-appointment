@@ -100,8 +100,14 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             wrapper.eq(Appointment.TYPE, type);
         }
 
-        wrapper.between(Appointment.APPOINTMENT_TIME,startTime==null?"1970-01-01 00:00:00":startTime, endTime==null?new Date():endTime);
-        
+        if(startTime != null && endTime != null) {
+            wrapper.between(Appointment.APPOINTMENT_TIME,startTime, endTime);
+        } else if(startTime != null) {
+            wrapper.gt(Appointment.APPOINTMENT_TIME, startTime);
+        } else if(endTime != null) {
+            wrapper.lt(Appointment.APPOINTMENT_TIME, endTime);
+        }
+
         wrapper.orderBy(Appointment.APPOINTMENT_TIME, false);
 
         List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);
