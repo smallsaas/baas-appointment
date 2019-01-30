@@ -53,7 +53,7 @@ public class AppointmentTypeEndpoint extends BaseController {
 
 
     @BusinessLog(name = "AppointmentType", value = "create AppointmentType")
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ApiOperation(value = "删除预约类型", response = AppointmentType.class)
     public Tip getAppointment(@PathVariable Long id) {
 
