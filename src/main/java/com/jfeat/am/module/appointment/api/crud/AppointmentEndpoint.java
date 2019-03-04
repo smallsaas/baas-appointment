@@ -1,6 +1,7 @@
 package com.jfeat.am.module.appointment.api.crud;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.jfeat.am.common.constant.tips.ErrorTip;
 import com.jfeat.am.common.constant.tips.SuccessTip;
 import com.jfeat.am.common.constant.tips.Tip;
@@ -84,12 +85,13 @@ public class AppointmentEndpoint extends BaseController {
         if (entity.getItemId() == null || entity.getItemName() == null) {
             throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约店铺不能为空");
         }
-
+        //判断预约人
+        if (entity.getMemberId() == null) {
+            throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约人不能为空");
+        }
 
         Integer affected = 0;
-        entity.setMemberId(JWTKit.getUserId(getHttpServletRequest()));
         try {
-
             if (entity.getStatus() == null) {
                 if (entity.getFee() == null || entity.getFee().compareTo(BigDecimal.ZERO) <= 0) {
                     entity.setStatus(AppointmentStatus.WAIT_TO_STORE.toString());
@@ -97,7 +99,7 @@ public class AppointmentEndpoint extends BaseController {
                     entity.setStatus(AppointmentStatus.PAY_PENDING.toString());
                 }
             }
-            entity.setFieldC(String.valueOf(new Date().getTime() + JWTKit.getUserId(getHttpServletRequest())));
+            entity.setFieldC(String.valueOf(new Date().getTime() + entity.getMemberId()));
             affected += appointmentService.createMaster(entity);
 
         } catch (DuplicateKeyException e) {
