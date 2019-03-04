@@ -56,7 +56,7 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
     /**
      * 店铺预约列表, 预约时间倒序
      */
-    public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status, Integer isAssigned, String doneSituation, String type, String search, Date startTime,Date endTime) {
+    public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status, Integer isAssigned, String doneSituation, String type, String search, Date startTime, Date endTime) {
         // check status must be WAIT_TO_STORE, DONE
         // while done
         EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
@@ -66,38 +66,59 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
         if (status != null) {
             if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
                 if (isAssigned == 1) {
-                    wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNotNull(Appointment.RECEPTIONIST_ID)
-                            .andNew()
-                            .like(Appointment.CODE, search)
-                            .or().like(Appointment.MEMBER_NAME, search)
-                            .or().like(Appointment.MEMBER_PHONE, search);
+                    if (search != null && search.length() > 0) {
+                        wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNotNull(Appointment.RECEPTIONIST_ID)
+                                .andNew()
+                                .like(Appointment.CODE, search)
+                                .or().like(Appointment.MEMBER_NAME, search)
+                                .or().like(Appointment.MEMBER_PHONE, search);
+                    } else {
+                        wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNotNull(Appointment.RECEPTIONIST_ID);
+                    }
                 } else {
-                    wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNull(Appointment.RECEPTIONIST_ID)
-                            .andNew()
-                            .like(Appointment.CODE, search)
-                            .or().like(Appointment.MEMBER_NAME, search)
-                            .or().like(Appointment.MEMBER_PHONE, search);
+                    if (search != null && search.length() > 0) {
+                        wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNull(Appointment.RECEPTIONIST_ID)
+                                .andNew()
+                                .like(Appointment.CODE, search)
+                                .or().like(Appointment.MEMBER_NAME, search)
+                                .or().like(Appointment.MEMBER_PHONE, search);
+                    } else {
+                        wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNull(Appointment.RECEPTIONIST_ID);
+                    }
                 }
 
             } else if ("DONE".equals(status)) {
                 if (doneSituation == null || doneSituation.length() == 0) {
-                    wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
-                            AppointmentStatus.ALREADY_TO_STORE.toString(),
-                            AppointmentStatus.MISS_TO_STORE.toString(),
-                            AppointmentStatus.CANCELLED.toString(),
-                            AppointmentStatus.EXPIRED.toString()
-                            )
-                            .andNew()
-                            .like(Appointment.CODE, search)
-                            .or().like(Appointment.MEMBER_NAME, search)
-                            .or().like(Appointment.MEMBER_PHONE, search);
+                    if (search != null && search.length() > 0) {
+                        wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
+                                AppointmentStatus.ALREADY_TO_STORE.toString(),
+                                AppointmentStatus.MISS_TO_STORE.toString(),
+                                AppointmentStatus.CANCELLED.toString(),
+                                AppointmentStatus.EXPIRED.toString()
+                        )
+                                .andNew()
+                                .like(Appointment.CODE, search)
+                                .or().like(Appointment.MEMBER_NAME, search)
+                                .or().like(Appointment.MEMBER_PHONE, search);
+                    } else {
+                        wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
+                                AppointmentStatus.ALREADY_TO_STORE.toString(),
+                                AppointmentStatus.MISS_TO_STORE.toString(),
+                                AppointmentStatus.CANCELLED.toString(),
+                                AppointmentStatus.EXPIRED.toString()
+                        );
+                    }
 
                 } else {
-                    wrapper.eq(Appointment.STATUS, doneSituation)
-                            .andNew()
-                            .like(Appointment.CODE, search)
-                            .or().like(Appointment.MEMBER_NAME, search)
-                            .or().like(Appointment.MEMBER_PHONE, search);
+                    if (search != null && search.length() > 0) {
+                        wrapper.eq(Appointment.STATUS, doneSituation)
+                                .andNew()
+                                .like(Appointment.CODE, search)
+                                .or().like(Appointment.MEMBER_NAME, search)
+                                .or().like(Appointment.MEMBER_PHONE, search);
+                    } else {
+                        wrapper.eq(Appointment.STATUS, doneSituation);
+                    }
                 }
 
             }
@@ -106,11 +127,11 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             wrapper.eq(Appointment.TYPE, type);
         }
 
-        if(startTime != null && endTime != null) {
-            wrapper.between(Appointment.APPOINTMENT_TIME,startTime, endTime);
-        } else if(startTime != null) {
+        if (startTime != null && endTime != null) {
+            wrapper.between(Appointment.APPOINTMENT_TIME, startTime, endTime);
+        } else if (startTime != null) {
             wrapper.gt(Appointment.APPOINTMENT_TIME, startTime);
-        } else if(endTime != null) {
+        } else if (endTime != null) {
             wrapper.lt(Appointment.APPOINTMENT_TIME, endTime);
         }
 
