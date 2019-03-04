@@ -67,14 +67,16 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
                 if (isAssigned == 1) {
                     wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNotNull(Appointment.RECEPTIONIST_ID)
+                            .andNew()
                             .like(Appointment.CODE, search)
-                            .like(Appointment.MEMBER_NAME, search)
-                            .like(Appointment.MEMBER_PHONE, search);
+                            .or().like(Appointment.MEMBER_NAME, search)
+                            .or().like(Appointment.MEMBER_PHONE, search);
                 } else {
                     wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNull(Appointment.RECEPTIONIST_ID)
+                            .andNew()
                             .like(Appointment.CODE, search)
-                            .like(Appointment.MEMBER_NAME, search)
-                            .like(Appointment.MEMBER_PHONE, search);
+                            .or().like(Appointment.MEMBER_NAME, search)
+                            .or().like(Appointment.MEMBER_PHONE, search);
                 }
 
             } else if ("DONE".equals(status)) {
@@ -84,14 +86,18 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                             AppointmentStatus.MISS_TO_STORE.toString(),
                             AppointmentStatus.CANCELLED.toString(),
                             AppointmentStatus.EXPIRED.toString()
-                    ).like(Appointment.CODE, search)
-                            .like(Appointment.MEMBER_NAME, search)
-                            .like(Appointment.MEMBER_PHONE, search);
+                            )
+                            .andNew()
+                            .like(Appointment.CODE, search)
+                            .or().like(Appointment.MEMBER_NAME, search)
+                            .or().like(Appointment.MEMBER_PHONE, search);
 
                 } else {
-                    wrapper.eq(Appointment.STATUS, doneSituation).like(Appointment.CODE, search)
-                            .like(Appointment.MEMBER_NAME, search)
-                            .like(Appointment.MEMBER_PHONE, search);
+                    wrapper.eq(Appointment.STATUS, doneSituation)
+                            .andNew()
+                            .like(Appointment.CODE, search)
+                            .or().like(Appointment.MEMBER_NAME, search)
+                            .or().like(Appointment.MEMBER_PHONE, search);
                 }
 
             }
