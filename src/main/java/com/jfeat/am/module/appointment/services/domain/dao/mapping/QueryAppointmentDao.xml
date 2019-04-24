@@ -126,4 +126,61 @@
         </if>
 
     </select>
+
+
+
+
+    <select id="myAppointment" resultType="com.jfeat.am.module.appointment.services.persistence.model.Appointment">
+
+        SELECT
+            id AS id,
+            CODE,
+            `type`,
+            item_id AS itemId,
+            item_name AS itemName,
+            item_address AS itemAddress,
+            item_description AS itemDescription,
+            item_icon AS itemIcon,
+            member_id AS memberId,
+            `status`,
+            fee,
+            create_time AS createTime,
+            appointment_time AS appointmentTime,
+            close_time AS closeTime,
+            member_phone AS memberPhone,
+            member_name AS memberName,
+            receptionist_id AS receptionistId,
+            server_id AS serverId,
+            `server_name` AS serverName,
+            receptionist_name AS receptionistName,
+            payment_timestamp AS paymentTimestamp,
+            payment_method AS paymentMethod,
+            field_c AS fieldC,
+            earliest_time AS earliestTime,
+            latest_time AS latestTime
+        FROM
+            t_appointment
+        WHERE
+            member_id = #{memberId}
+        AND
+            CASE
+                WHEN #{status} = 'DONE' THEN (t_appointment.status = 'ALREADY_TO_STORE' OR
+                                              t_appointment.status = 'MISS_TO_STORE' OR
+                                              t_appointment.status = 'CANCELLED' OR
+                                              t_appointment.status = 'EXPIRED')
+                WHEN #{status} = 'WAIT_TO_STORE' THEN t_appointment.status = 'WAIT_TO_STORE'
+            ELSE NULL END
+
+        ORDER BY create_time DESC
+        <!--ORDER BY
+            CASE
+                WHEN #{status} = 'DONE' THEN
+                    close_time
+                WHEN #{status} = 'WAIT_TO_STORE' THEN
+                    create_time
+                ELSE
+                    NULL
+                END-->
+
+    </select>
 </mapper>

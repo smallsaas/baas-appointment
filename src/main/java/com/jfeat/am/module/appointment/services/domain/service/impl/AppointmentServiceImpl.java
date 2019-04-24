@@ -2,6 +2,7 @@ package com.jfeat.am.module.appointment.services.domain.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentDao;
 import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
 
@@ -27,12 +28,15 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
 
     @Resource
     AppointmentMapper appointmentMapper;
+    @Resource
+    QueryAppointmentDao queryAppointmentDao;
 
     /**
      * 我的预约列表, 预约时间倒序
      */
     public List<Appointment> myAppointments(Page<Appointment> page, Long memberId, String status) {
-        // check status must be WAIT_TO_STORE, DONE
+        return queryAppointmentDao.myAppointment(page,memberId,status);
+        /*// check status must be WAIT_TO_STORE, DONE
         EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
         wrapper.eq(Appointment.MEMBER_ID, memberId);
 
@@ -48,8 +52,7 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             ).orderBy(Appointment.CLOSE_TIME, false);
         }
 
-        List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);
-        return appointments;
+        List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);*/
     }
 
 

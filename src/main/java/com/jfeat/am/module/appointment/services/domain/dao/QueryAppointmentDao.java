@@ -3,6 +3,7 @@ package com.jfeat.am.module.appointment.services.domain.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.jfeat.am.module.appointment.services.domain.model.AppointmentRecord;
+import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -19,4 +20,8 @@ public interface QueryAppointmentDao extends BaseMapper<AppointmentRecord> {
                                                 @Param("search") String search,
                                                 @Param("startTime") Date startTime,
                                                 @Param("endTime") Date endTime);
+
+    List<Appointment> myAppointment(Page<Appointment> page,
+                                    @Param("memberId")Long memberId,
+                                    @Param("status")String status);
 }
