@@ -162,17 +162,7 @@
         FROM
             t_appointment
         WHERE
-            (
                 user_id = #{memberId}
-                OR member_id = (
-                    SELECT
-                    vip_account.id
-                    FROM
-                    vip_account
-                    LEFT JOIN mallwebapp.t_user ON mallwebapp.t_user.login_name = mall.vip_account.account
-                    WHERE t_user.id = #{memberId}
-                )
-            )
         AND
             CASE
                 WHEN #{status} = 'DONE' THEN (t_appointment.status = 'ALREADY_TO_STORE' OR
@@ -182,16 +172,17 @@
                 WHEN #{status} = 'WAIT_TO_STORE' THEN t_appointment.status = 'WAIT_TO_STORE'
             ELSE NULL END
 
-        ORDER BY create_time DESC
-        <!--ORDER BY
-            CASE
-                WHEN #{status} = 'DONE' THEN
-                    close_time
-                WHEN #{status} = 'WAIT_TO_STORE' THEN
-                    create_time
-                ELSE
-                    NULL
-                END-->
+        ORDER BY
+        (CASE
+            WHEN #{status}='DONE' THEN
+                close_time
+            WHEN #{status}='WAIT_TO_STORE' THEN
+                appointment_time
+            ELSE create_time END
+        )
+        DESC
+        <!--ORDER BY create_time DESC-->
+
 
     </select>
 </mapper>
