@@ -157,11 +157,22 @@
             payment_method AS paymentMethod,
             field_c AS fieldC,
             earliest_time AS earliestTime,
-            latest_time AS latestTime
+            latest_time AS latestTime,
+            user_id AS userId
         FROM
             t_appointment
         WHERE
-            member_id = #{memberId}
+            (
+                user_id = #{memberId}
+                OR member_id = (
+                    SELECT
+                    vip_account.id
+                    FROM
+                    vip_account
+                    LEFT JOIN mallwebapp.t_user ON mallwebapp.t_user.login_name = mall.vip_account.account
+                    WHERE t_user.id = #{memberId}
+                )
+            )
         AND
             CASE
                 WHEN #{status} = 'DONE' THEN (t_appointment.status = 'ALREADY_TO_STORE' OR

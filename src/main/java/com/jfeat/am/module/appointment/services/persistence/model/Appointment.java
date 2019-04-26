@@ -153,6 +153,12 @@ public class Appointment extends Model<Appointment> {
     @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date latestTime;
 
+    /**
+     * 预约客户用户ID
+     */
+    @TableField("user_id")
+    private Long userId;
+
     public Long getId() {
         return id;
     }
@@ -376,7 +382,18 @@ public class Appointment extends Model<Appointment> {
         this.latestTime = latestTime;
     }
 
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public static final String ID = "id";
+
+    public static final String USERID = "user_id";
 
     public static final String CODE = "code";
 
@@ -435,6 +452,7 @@ public class Appointment extends Model<Appointment> {
     public String toString() {
         return "Appointment{" +
                 "id=" + id +
+                "userId=" + userId +
                 ", code=" + code +
                 ", type=" + type +
                 ", itemId=" + itemId +
