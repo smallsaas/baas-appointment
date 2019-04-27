@@ -35,8 +35,8 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
      * 我的预约列表, 预约时间倒序
      */
     public List<Appointment> myAppointments(Page<Appointment> page, Long memberId, String status) {
-        return queryAppointmentDao.myAppointment(page,memberId,status);
-        /*// check status must be WAIT_TO_STORE, DONE
+        //return queryAppointmentDao.myAppointment(page,memberId,status);
+        // check status must be WAIT_TO_STORE, DONE
         EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
         wrapper.eq(Appointment.MEMBER_ID, memberId);
 
@@ -52,7 +52,8 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             ).orderBy(Appointment.CLOSE_TIME, false);
         }
 
-        List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);*/
+        List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);
+        return appointments;
     }
 
 

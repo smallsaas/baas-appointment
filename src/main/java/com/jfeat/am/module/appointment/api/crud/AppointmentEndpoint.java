@@ -177,6 +177,7 @@ public class AppointmentEndpoint extends BaseController {
         }
         appointment.setStatus(AppointmentStatus.PAY_TIMEOUT.toString());
         appointment.setId(id);
+        appointment.setCloseTime(new Date());
         return SuccessTip.create(appointmentService.updateMaster(appointment));
     }
 
@@ -189,6 +190,7 @@ public class AppointmentEndpoint extends BaseController {
         if (appointment.getStatus().equals(AppointmentStatus.PAY_PENDING.toString()) ||
                 appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.CANCELLED.toString());
+            appointment.setCloseTime(new Date());
             appointment.setId(id);
             return SuccessTip.create(appointmentService.updateMaster(appointment));
         }
@@ -205,6 +207,7 @@ public class AppointmentEndpoint extends BaseController {
         if (appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.ALREADY_TO_STORE.toString());
             appointment.setId(id);
+            appointment.setCloseTime(new Date());
             return SuccessTip.create(appointmentService.updateMaster(appointment));
         }
 
@@ -221,6 +224,7 @@ public class AppointmentEndpoint extends BaseController {
         if (appointment.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
             appointment.setStatus(AppointmentStatus.MISS_TO_STORE.toString());
             appointment.setId(id);
+            appointment.setCloseTime(new Date());
             return SuccessTip.create(appointmentService.updateMaster(appointment));
         }
 
@@ -357,6 +361,7 @@ public class AppointmentEndpoint extends BaseController {
             if (r.getStatus().equals(AppointmentStatus.WAIT_TO_STORE.toString())) {
                 if (r.getAppointmentTime().compareTo(todayDate) <= 0) {
                     r.setStatus(AppointmentStatus.EXPIRED.toString());
+                    r.setCloseTime(new Date());
                     appointmentService.updateMaster(r);
                 }
             }
