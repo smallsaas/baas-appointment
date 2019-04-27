@@ -38,7 +38,7 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
         //return queryAppointmentDao.myAppointment(page,memberId,status);
         // check status must be WAIT_TO_STORE, DONE
         EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
-        wrapper.eq(Appointment.MEMBER_ID, memberId);
+        wrapper.eq(Appointment.USERID, memberId);
 
         if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
             wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).orderBy(Appointment.CREATE_TIME, false);
