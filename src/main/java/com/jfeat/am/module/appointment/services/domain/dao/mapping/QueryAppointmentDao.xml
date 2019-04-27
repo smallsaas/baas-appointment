@@ -125,7 +125,7 @@
         ]]>
         </if>
 
-        ORDER BY appointment_time DESC
+        ORDER BY appointment_time DESC,create_time DESC
 
 
     </select>
