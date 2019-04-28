@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -89,6 +90,19 @@ public class AppointmentEndpoint extends BaseController {
         if (entity.getMemberId() == null) {
             throw new BusinessException(BusinessCode.BadRequest.getCode(), "类型错误：预约人不能为空");
         }
+        Calendar afterCalendar = Calendar.getInstance();
+        afterCalendar.set(Calendar.DAY_OF_YEAR, afterCalendar.get(Calendar.DAY_OF_YEAR) + 7);
+        Date today = afterCalendar.getTime();
+        if (entity.getAppointmentTime().after(today)){
+            throw new BusinessException(5500,"预约时间异常，只能提前7天预约！");
+        }
+
+        Calendar beforeCalendar = Calendar.getInstance();
+        beforeCalendar.set(Calendar.DAY_OF_YEAR, beforeCalendar.get(Calendar.DAY_OF_YEAR));
+        today = beforeCalendar.getTime();
+        if (entity.getAppointmentTime().before(today)){
+            throw new BusinessException(5500,"预约时间异常，无法对已经过去的时间进行预约！");
+        }
 
         Integer affected = 0;
         try {
@@ -99,6 +113,7 @@ public class AppointmentEndpoint extends BaseController {
                     entity.setStatus(AppointmentStatus.PAY_PENDING.toString());
                 }
             }
+            entity.setUserId(JWTKit.getUserId(getHttpServletRequest()));
             entity.setFieldC(String.valueOf(new Date().getTime() + entity.getMemberId()));
             affected += appointmentService.createMaster(entity);
 
