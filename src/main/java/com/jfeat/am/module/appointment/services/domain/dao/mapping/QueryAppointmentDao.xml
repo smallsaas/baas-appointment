@@ -190,8 +190,8 @@
     </select>
 
     <select id="userIdToVipId" resultType="java.lang.Long">
-        SELECT vip_account.id FROM muaskin_MallWebapp.t_user
-        LEFT JOIN vip_account on vip_account.account = muaskin_MallWebapp.t_user.login_name
+        SELECT vip_account.id FROM MallWebapp.t_user
+        LEFT JOIN vip_account on vip_account.account = MallWebapp.t_user.login_name
         WHERE t_user.id=#{userId}
     </select>
 </mapper>
