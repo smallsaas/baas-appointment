@@ -252,7 +252,7 @@ public class AppointmentEndpoint extends BaseController {
     @ApiOperation("删除预约详情")
     public Tip deleteAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
-        Long userId = JWTKit.getUserId(getHttpServletRequest());
+        Long userId = queryAppointmentDao.userIdToVipId(JWTKit.getUserId(getHttpServletRequest()));
         if (appointment.getMemberId().compareTo(userId) != 0 ||
                 !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)) {
             throw new BusinessException(BusinessCode.NoPermission);
@@ -265,7 +265,7 @@ public class AppointmentEndpoint extends BaseController {
     @ApiOperation("删除预约详情 无需权限检查")
     public Tip deleteAppointmentWithoutPermission(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
-        Long userId = JWTKit.getUserId(getHttpServletRequest());
+        Long userId = queryAppointmentDao.userIdToVipId(JWTKit.getUserId(getHttpServletRequest()));
         if (appointment.getMemberId().compareTo(userId) != 0) {
             throw new BusinessException(BusinessCode.NoPermission);
         }

@@ -24,4 +24,6 @@ public interface QueryAppointmentDao extends BaseMapper<AppointmentRecord> {
     List<Appointment> myAppointment(Page<Appointment> page,
                                     @Param("memberId")Long memberId,
                                     @Param("status")String status);
+
+    Long userIdToVipId(@Param("userId")Long userId);
 }
