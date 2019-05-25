@@ -8,6 +8,9 @@
 #增加user_id 字段，去处理我的预约，虽然直接update member_id 为 user_id 也能实现，但是，还是加吧。 26/04/2019
 
 
+#25/05/2019 删除 预约 ，因为 保存的是 vipId ，所以需要将传递的userId 转化为 vipid
+
+
 
 
 
