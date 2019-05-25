@@ -100,9 +100,10 @@ public class AppointmentEndpoint extends BaseController {
         Calendar beforeCalendar = Calendar.getInstance();
         beforeCalendar.set(Calendar.DAY_OF_YEAR, beforeCalendar.get(Calendar.DAY_OF_YEAR));
         today = beforeCalendar.getTime();
-        if (entity.getAppointmentTime().before(today)){
+//        entity.getAppointmentTime()+entity.getEarliestTime()
+        /*if (entity.getAppointmentTime().before(today)){
             throw new BusinessException(5500,"预约时间异常，无法对已经过去的时间进行预约！");
-        }
+        }*/
 
         Integer affected = 0;
         try {
