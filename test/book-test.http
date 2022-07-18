@@ -1,0 +1,161 @@
+
+
+@endpoint=http://localhost:8080
+@adminToken =Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJvcmdJZCI6IjEiLCJ1c2VySWQiOiIxIiwidGVuYW50T3JnSWQiOjEsImFjY291bnQiOiJhZG1pbiIsInVzZXJUeXBlIjoxMDAsImRldlVzZXJUeXBlIjowLCJiVXNlclR5cGUiOiJTWVNURU0iLCJpYXQiOjE2NTgxMzI2MzMsImp0aSI6IjEiLCJzdWIiOiJhZG1pbiIsImV4cCI6MTY1ODM5MTgzM30.fCcLNWzWVrCRCh8232Rua8WYpAT4KZgan56EzBP-xP3zUhUQpoQQ2QXeK6tSU_jGvZCJljQJVTavFYm1G7r4Ew
+###
+### 新建预约
+POST {{endpoint}}/api/booking/book
+Authorization:{{adminToken}}
+{
+    "appointmentTime": "2022-07-12 14:54:31",
+    "closeTime": null,
+    "code": "fadsfdfasfaaa",
+    "createTime": "2022-07-13 14:54:37",
+    "earliestTime": null,
+    "fee": null,
+    "fieldC": null,
+    "itemAddress": null,
+    "itemDescription": null,
+    "itemIcon": null,
+    "itemId": 2,
+    "itemName": "软件开发有限公司",
+    "latestTime": null,
+    "memberId": 1,
+    "memberName": null,
+    "memberPhone": null,
+    "paymentMethod": null,
+    "paymentTimestamp": null,
+    "receptionistId": null,
+    "receptionistName": null,
+    "serverId": null,
+    "serverName": null,
+    "type": "1",
+    "userId": null
+}
+
+
+### 获取预约列表
+GET {{endpoint}}/api/booking/book
+Authorization:{{adminToken}}
+
+### 查看预约详情
+GET {{endpoint}}/api/booking/book/1
+Authorization:{{adminToken}}
+
+
+### 修改预约详情
+PUT {{endpoint}}/api/booking/book/1
+Authorization:{{adminToken}}
+{
+    "appointmentTime": "2022-07-12 14:54:31",
+    "closeTime": null,
+    "code": "fadsfdfasfa",
+    "createTime": "2022-07-13 14:54:37",
+    "earliestTime": null,
+    "fee": null,
+    "fieldC": null,
+    "itemAddress": null,
+    "itemDescription": null,
+    "itemIcon": null,
+    "itemId": null,
+    "itemName": null,
+    "latestTime": null,
+    "memberId": null,
+    "memberName": null,
+    "memberPhone": null,
+    "paymentMethod": null,
+    "paymentTimestamp": null,
+    "receptionistId": null,
+    "receptionistName": null,
+    "serverId": null,
+    "serverName": null,
+    "type": "1",
+    "userId": null
+}
+
+# 修改预约状态 支付预约
+# WECHAT,   // 微信支付
+# ALIPAY,   // 支付宝支付
+# CASH,      // 现金支付
+# CARD,       //银行卡
+# WALLET      //零钱钱包
+POST {{endpoint}}/api/booking/book/1/action/pay
+Authorization:{{adminToken}}
+{
+    "timestamp":1658134292310,
+    "method":"WECHAT"
+}
+
+### 修改预约状态 支付超时
+POST {{endpoint}}/api/booking/book/1/action/timeout
+Authorization:{{adminToken}}
+
+### 取消预约
+POST {{endpoint}}/api/booking/book/1/action/cancel
+Authorization:{{adminToken}}
+
+
+### 到店预约---会员到店
+POST {{endpoint}}/api/booking/book/1/action/check
+Authorization:{{adminToken}}
+
+### 会员失约
+POST {{endpoint}}/api/booking/book/1/action/miss
+Authorization:{{adminToken}}
+
+
+### 删除预约 需要权限
+DELETE {{endpoint}}/api/booking/book/1
+Authorization:{{adminToken}}
+
+
+### 删除预约 不需要权限
+DELETE {{endpoint}}/api/booking/book/app/1
+Authorization:{{adminToken}}
+
+
+# 预约类型管理
+
+### 预约类型列表
+GET {{endpoint}}/api/booking/items
+Authorization:{{adminToken}}
+
+### 查询预约类型详情
+GET {{endpoint}}/api/booking/items/2
+Authorization:{{adminToken}}
+
+### 添加预约类型
+POST {{endpoint}}/api/booking/items
+Authorization:{{adminToken}}
+{
+    "status": 2,
+    "type": "心理看见"
+}
+
+### 删除预约类型
+DELETE {{endpoint}}/api/booking/items/5
+Authorization:{{adminToken}}
+
+
+# 建立联系
+POST {{endpoint}}/api/stores/1/books/items
+Authorization:{{adminToken}}
+{
+    "ids":[1,]
+}
+
+# 修改联系
+PUT {{endpoint}}/api/stores/1/books/items
+Authorization:{{adminToken}}
+{
+    "ids":[1,]
+}
+
+
+### 我的店铺预约列表 支持两种状态 [WAIT_TO_STORE, DONE]
+GET {{endpoint}}/api/booking/b/books?itemId=1
+Authorization:{{adminToken}}
+
+### 我的预约列表 支持两种状态 [WAIT_TO_STORE, DONE]
+GET {{endpoint}}/api/booking/app/books?status=DONE
+Authorization:{{adminToken}}

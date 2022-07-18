@@ -1,7 +1,8 @@
 package com.jfeat.am.module.appointment.services.crud.service;
-            import com.jfeat.am.common.crud.CRUDServiceOnly;
+
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
-import com.jfeat.am.common.constant.tips.Ids;
+
+            import com.jfeat.crud.plus.CRUDServiceOnly;
 
 /**
  * <p>

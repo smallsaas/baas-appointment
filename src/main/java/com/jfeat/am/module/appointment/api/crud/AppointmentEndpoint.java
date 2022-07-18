@@ -1,13 +1,6 @@
 package com.jfeat.am.module.appointment.api.crud;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.jfeat.am.common.constant.tips.ErrorTip;
-import com.jfeat.am.common.constant.tips.SuccessTip;
-import com.jfeat.am.common.constant.tips.Tip;
-import com.jfeat.am.common.controller.BaseController;
-import com.jfeat.am.common.exception.BusinessCode;
-import com.jfeat.am.common.exception.BusinessException;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.am.core.jwt.JWTKit;
 import com.jfeat.am.core.shiro.ShiroKit;
 import com.jfeat.am.module.appointment.api.permission.AppointmentPermission;
@@ -19,7 +12,12 @@ import com.jfeat.am.module.appointment.services.domain.model.AppointmentModel;
 import com.jfeat.am.module.appointment.services.domain.model.AppointmentRecord;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
-import com.jfeat.am.module.log.annotation.BusinessLog;
+import com.jfeat.crud.base.annotation.BusinessLog;
+import com.jfeat.crud.base.exception.BusinessCode;
+import com.jfeat.crud.base.exception.BusinessException;
+import com.jfeat.crud.base.tips.ErrorTip;
+import com.jfeat.crud.base.tips.SuccessTip;
+import com.jfeat.crud.base.tips.Tip;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.dao.DuplicateKeyException;
@@ -44,8 +42,8 @@ import java.util.List;
  */
 @RestController
 @Api("预约管理")
-@RequestMapping("/api/appointment/appointments")
-public class AppointmentEndpoint extends BaseController {
+@RequestMapping("/api/booking/book")
+public class AppointmentEndpoint  {
 
 
     @Resource
@@ -114,7 +112,7 @@ public class AppointmentEndpoint extends BaseController {
                     entity.setStatus(AppointmentStatus.PAY_PENDING.toString());
                 }
             }
-            entity.setUserId(JWTKit.getUserId(getHttpServletRequest()));
+            entity.setUserId(JWTKit.getUserId());
             entity.setFieldC(String.valueOf(new Date().getTime() + entity.getMemberId()));
             affected += appointmentService.createMaster(entity);
 
@@ -137,7 +135,7 @@ public class AppointmentEndpoint extends BaseController {
     public Tip updateAppointment(@PathVariable Long id, @RequestBody AppointmentModel entity) {
         entity.setId(id);
         Appointment appointment = appointmentService.retrieveMaster(id);
-        Long userId = JWTKit.getUserId(getHttpServletRequest());
+        Long userId = JWTKit.getUserId();
         if (!appointment.getMemberId().equals(userId) ||
                 !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)) {
             throw new BusinessException(BusinessCode.NoPermission);
@@ -253,7 +251,7 @@ public class AppointmentEndpoint extends BaseController {
     @ApiOperation("删除预约详情")
     public Tip deleteAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
-        Long userId = queryAppointmentDao.userIdToVipId(JWTKit.getUserId(getHttpServletRequest()));
+        Long userId = queryAppointmentDao.userIdToVipId(JWTKit.getUserId());
         if (appointment.getMemberId().compareTo(userId) != 0 ||
                 !ShiroKit.hasPermission(AppointmentPermission.APPOINTMENT_VIEW)) {
             throw new BusinessException(BusinessCode.NoPermission);
@@ -266,7 +264,7 @@ public class AppointmentEndpoint extends BaseController {
     @ApiOperation("删除预约详情 无需权限检查")
     public Tip deleteAppointmentWithoutPermission(@PathVariable Long id) {
         Appointment appointment = appointmentService.retrieveMaster(id);
-        Long userId = queryAppointmentDao.userIdToVipId(JWTKit.getUserId(getHttpServletRequest()));
+        Long userId = queryAppointmentDao.userIdToVipId(JWTKit.getUserId());
         if (appointment.getMemberId().compareTo(userId) != 0) {
             throw new BusinessException(BusinessCode.NoPermission);
         }

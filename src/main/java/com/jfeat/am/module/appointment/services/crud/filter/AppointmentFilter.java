@@ -1,7 +1,8 @@
 package com.jfeat.am.module.appointment.services.crud.filter;
 
-import com.jfeat.am.common.crud.CRUDFilter;
+
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
+import com.jfeat.crud.plus.CRUDFilter;
 
 
 /**

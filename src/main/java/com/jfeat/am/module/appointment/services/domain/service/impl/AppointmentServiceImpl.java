@@ -1,7 +1,8 @@
 package com.jfeat.am.module.appointment.services.domain.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentDao;
 import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
@@ -37,22 +38,31 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
     public List<Appointment> myAppointments(Page<Appointment> page, Long memberId, String status) {
         //return queryAppointmentDao.myAppointment(page,memberId,status);
         // check status must be WAIT_TO_STORE, DONE
-        EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
+
+        QueryWrapper<Appointment> wrapper = new QueryWrapper<>();
         wrapper.eq(Appointment.USERID, memberId);
 
         if (AppointmentStatus.WAIT_TO_STORE.toString().equals(status)) {
-            wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).orderBy(Appointment.CREATE_TIME, false);
+            wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString());
+//                    .orderBy(Appointment.CREATE_TIME, false);
 
         } else if ("DONE".equals(status)) {
-            wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
-                    AppointmentStatus.ALREADY_TO_STORE.toString(),
-                    AppointmentStatus.MISS_TO_STORE.toString(),
-                    AppointmentStatus.CANCELLED.toString(),
-                    AppointmentStatus.EXPIRED.toString()
-            ).orderBy(Appointment.CLOSE_TIME, false);
+
+            wrapper.and(w->w.eq("status",AppointmentStatus.ALREADY_TO_STORE.toString())
+                    .or().eq("status",AppointmentStatus.MISS_TO_STORE.toString())
+                    .eq("status",AppointmentStatus.CANCELLED.toString())
+                    .eq("status",AppointmentStatus.EXPIRED.toString()));
+
+//
+//            wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
+//                    AppointmentStatus.ALREADY_TO_STORE.toString(),
+//                    AppointmentStatus.MISS_TO_STORE.toString(),
+//                    AppointmentStatus.CANCELLED.toString(),
+//                    AppointmentStatus.EXPIRED.toString()
+//            ).orderBy(Appointment.CLOSE_TIME, false);
         }
 
-        List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);
+        List<Appointment> appointments =  appointmentMapper.selectList(wrapper);
         return appointments;
     }
 
@@ -63,7 +73,7 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
     public List<Appointment> myBusinessAppointments(Page<Appointment> page, Long itemId, String status, Integer isAssigned, String doneSituation, String type, String search, Date startTime, Date endTime) {
         // check status must be WAIT_TO_STORE, DONE
         // while done
-        EntityWrapper<Appointment> wrapper = new EntityWrapper<>();
+        QueryWrapper<Appointment> wrapper = new QueryWrapper<>();
         wrapper.eq(Appointment.ITEM_ID, itemId);
 
 
@@ -72,7 +82,7 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                 if (isAssigned == 1) {
                     if (search != null && search.length() > 0) {
                         wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNotNull(Appointment.RECEPTIONIST_ID)
-                                .andNew()
+//                                .andNew()
                                 .like(Appointment.CODE, search)
                                 .or().like(Appointment.MEMBER_NAME, search)
                                 .or().like(Appointment.MEMBER_PHONE, search);
@@ -82,7 +92,7 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
                 } else {
                     if (search != null && search.length() > 0) {
                         wrapper.eq(Appointment.STATUS, AppointmentStatus.WAIT_TO_STORE.toString()).isNull(Appointment.RECEPTIONIST_ID)
-                                .andNew()
+//                                .andNew()
                                 .like(Appointment.CODE, search)
                                 .or().like(Appointment.MEMBER_NAME, search)
                                 .or().like(Appointment.MEMBER_PHONE, search);
@@ -94,29 +104,41 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             } else if ("DONE".equals(status)) {
                 if (doneSituation == null || doneSituation.length() == 0) {
                     if (search != null && search.length() > 0) {
-                        wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
-                                AppointmentStatus.ALREADY_TO_STORE.toString(),
-                                AppointmentStatus.MISS_TO_STORE.toString(),
-                                AppointmentStatus.CANCELLED.toString(),
-                                AppointmentStatus.EXPIRED.toString()
-                        )
-                                .andNew()
+                        wrapper.and(w->w.eq("status",AppointmentStatus.ALREADY_TO_STORE.toString())
+                                .or().eq("status",AppointmentStatus.MISS_TO_STORE.toString())
+                                .eq("status",AppointmentStatus.CANCELLED.toString())
+                                .eq("status",AppointmentStatus.EXPIRED.toString())
                                 .like(Appointment.CODE, search)
                                 .or().like(Appointment.MEMBER_NAME, search)
-                                .or().like(Appointment.MEMBER_PHONE, search);
-                    } else {
-                        wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
-                                AppointmentStatus.ALREADY_TO_STORE.toString(),
-                                AppointmentStatus.MISS_TO_STORE.toString(),
-                                AppointmentStatus.CANCELLED.toString(),
-                                AppointmentStatus.EXPIRED.toString()
+                                .or().like(Appointment.MEMBER_PHONE, search)
                         );
+//                        wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
+//                                AppointmentStatus.ALREADY_TO_STORE.toString(),
+//                                AppointmentStatus.MISS_TO_STORE.toString(),
+//                                AppointmentStatus.CANCELLED.toString(),
+//                                AppointmentStatus.EXPIRED.toString()
+//                        )
+//                                .andNew()
+//                                .like(Appointment.CODE, search)
+//                                .or().like(Appointment.MEMBER_NAME, search)
+//                                .or().like(Appointment.MEMBER_PHONE, search);
+                    } else {
+                        wrapper.and(w->w.eq("status",AppointmentStatus.ALREADY_TO_STORE.toString())
+                        .or().eq("status",AppointmentStatus.MISS_TO_STORE.toString())
+                                .eq("status",AppointmentStatus.CANCELLED.toString())
+                                .eq("status",AppointmentStatus.EXPIRED.toString()));
+//                        wrapper.andNew("status={0} OR status={1} OR status={2} OR status={3}",
+//                                AppointmentStatus.ALREADY_TO_STORE.toString(),
+//                                AppointmentStatus.MISS_TO_STORE.toString(),
+//                                AppointmentStatus.CANCELLED.toString(),
+//                                AppointmentStatus.EXPIRED.toString()
+//                        );
                     }
 
                 } else {
                     if (search != null && search.length() > 0) {
                         wrapper.eq(Appointment.STATUS, doneSituation)
-                                .andNew()
+//                                .andNew()
                                 .like(Appointment.CODE, search)
                                 .or().like(Appointment.MEMBER_NAME, search)
                                 .or().like(Appointment.MEMBER_PHONE, search);
@@ -139,9 +161,9 @@ public class AppointmentServiceImpl extends CRUDAppointmentServiceImpl implement
             wrapper.lt(Appointment.APPOINTMENT_TIME, endTime);
         }
 
-        wrapper.orderBy(Appointment.APPOINTMENT_TIME, false);
+//        wrapper.orderBy(Appointment.APPOINTMENT_TIME, false);
 
-        List<Appointment> appointments = appointmentMapper.selectPage(page, wrapper);
+        List<Appointment> appointments =  appointmentMapper.selectList(wrapper);
         return appointments;
     }
 }

@@ -2,11 +2,12 @@ package com.jfeat.am.module.appointment.services.persistence.model;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.enums.IdType;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import java.io.Serializable;
 
 /**
@@ -34,6 +35,16 @@ public class StoreAppointmentType extends Model<StoreAppointmentType> {
 	@TableField("appointment_type_id")
 	private Long appointmentTypeId;
 
+	@TableField(exist = false)
+	private String ew;
+
+	public String getEw() {
+		return ew;
+	}
+
+	public void setEw(String ew) {
+		this.ew = ew;
+	}
 
 	public Long getId() {
 		return id;

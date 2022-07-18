@@ -1,7 +1,7 @@
 package com.jfeat.am.module.appointment.services.persistence.dao;
 
 import com.jfeat.am.module.appointment.services.persistence.model.StoreAppointmentType;
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface StoreAppointmentTypeMapper extends BaseMapper<StoreAppointmentType> {
 
+    StoreAppointmentType selectOne(StoreAppointmentType relation);
 }

@@ -1,13 +1,12 @@
 package com.jfeat.am.module.appointment.api.crud;
 
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.jfeat.am.common.constant.tips.SuccessTip;
-import com.jfeat.am.common.constant.tips.Tip;
-import com.jfeat.am.common.controller.BaseController;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentTypeService;
 import com.jfeat.am.module.appointment.services.persistence.model.AppointmentType;
-import com.jfeat.am.module.log.annotation.BusinessLog;
+import com.jfeat.crud.base.annotation.BusinessLog;
+import com.jfeat.crud.base.tips.SuccessTip;
+import com.jfeat.crud.base.tips.Tip;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +15,8 @@ import javax.annotation.Resource;
 
 @RestController
 @Api("预约类型管理")
-@RequestMapping("/api/appointment/items")
-public class AppointmentTypeEndpoint extends BaseController {
+@RequestMapping("/api/booking/items")
+public class AppointmentTypeEndpoint {
 
     @Resource
     AppointmentTypeService appointmentTypeService;

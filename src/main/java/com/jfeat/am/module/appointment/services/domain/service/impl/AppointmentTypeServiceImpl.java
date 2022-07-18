@@ -1,8 +1,8 @@
 package com.jfeat.am.module.appointment.services.domain.service.impl;
 
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentTypeDao;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentTypeService;
 import com.jfeat.am.module.appointment.services.persistence.dao.AppointmentTypeMapper;
@@ -51,12 +51,12 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
         if (status == null) {
             if (name != null && name.length() > 0) {
 
-                List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
-                        new EntityWrapper<AppointmentType>().eq("type", name));
+                List<AppointmentType> types = (List<AppointmentType>) appointmentTypeMapper.selectList(
+                        new QueryWrapper<AppointmentType>().eq("type", name));
                 return types;
             } else {
-                List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
-                        new EntityWrapper<AppointmentType>());
+                List<AppointmentType> types =  appointmentTypeMapper.selectList(
+                        new QueryWrapper<AppointmentType>());
                 return types;
 
             }
@@ -64,12 +64,14 @@ public class AppointmentTypeServiceImpl implements AppointmentTypeService {
         } else {
             if (name != null && name.length() > 0) {
 
-                List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
-                        new EntityWrapper<AppointmentType>().eq("type", name).eq("status", status).orderBy(AppointmentType.STATUS,false));
+                List<AppointmentType> types = appointmentTypeMapper.selectList(
+                        new QueryWrapper<AppointmentType>().eq("type", name).eq("status", status));
+//                                .orderBy(AppointmentType.STATUS,false));
                 return types;
             } else {
-                List<AppointmentType> types = appointmentTypeMapper.selectPage(page,
-                        new EntityWrapper<AppointmentType>().eq("status", status).orderBy(AppointmentType.STATUS,false));
+                List<AppointmentType> types =  appointmentTypeMapper.selectList(
+                        new QueryWrapper<AppointmentType>().eq("status", status));
+//                                .orderBy(false,AppointmentType.STATUS));
                 return types;
 
             }

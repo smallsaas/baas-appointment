@@ -1,6 +1,6 @@
 package com.jfeat.am.module.appointment.services.domain.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.am.module.appointment.services.persistence.model.AppointmentType;
 
 import java.util.List;

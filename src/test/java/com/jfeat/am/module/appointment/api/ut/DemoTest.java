@@ -5,7 +5,7 @@ package com.jfeat.am.module.appointment.api.ut;
  */
 
 import com.alibaba.fastjson.JSON;
-import com.jfeat.am.test.BaseJunit;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by jackyhuang on 2017/10/16.
  */
-public class DemoTest extends BaseJunit {
+public class DemoTest {
 
     @Before
     public void initData() {

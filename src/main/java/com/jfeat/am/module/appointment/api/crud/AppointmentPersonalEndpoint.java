@@ -1,18 +1,18 @@
 package com.jfeat.am.module.appointment.api.crud;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.am.common.annotation.Permission;
-import com.jfeat.am.common.constant.tips.SuccessTip;
-import com.jfeat.am.common.constant.tips.Tip;
-import com.jfeat.am.common.controller.BaseController;
-import com.jfeat.am.common.exception.BusinessCode;
-import com.jfeat.am.common.exception.BusinessException;
+
 import com.jfeat.am.core.jwt.JWTKit;
-import com.jfeat.am.core.shiro.ShiroKit;
+
 import com.jfeat.am.module.appointment.api.permission.AppointmentPermission;
 import com.jfeat.am.module.appointment.services.domain.definition.AppointmentStatus;
 import com.jfeat.am.module.appointment.services.domain.service.AppointmentService;
 import com.jfeat.am.module.appointment.services.persistence.model.Appointment;
+import com.jfeat.crud.base.exception.BusinessCode;
+import com.jfeat.crud.base.exception.BusinessException;
+import com.jfeat.crud.base.tips.SuccessTip;
+import com.jfeat.crud.base.tips.Tip;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,14 +32,14 @@ import java.util.Date;
  */
 @RestController
 @Api("预约管理")
-@RequestMapping("/api")
-public class AppointmentPersonalEndpoint extends BaseController {
+@RequestMapping("/api/booking")
+public class AppointmentPersonalEndpoint  {
 
     @Resource
     AppointmentService appointmentService;
 
     @ApiOperation("我的店铺预约列表 支持两种状态 [WAIT_TO_STORE, DONE]")
-    @GetMapping("/appointment/b/appointments")
+    @GetMapping("/b/books")
     public Tip myStoreAppointments(Page<Appointment> page,
                                    @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                    @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
@@ -69,7 +69,7 @@ public class AppointmentPersonalEndpoint extends BaseController {
     }
 
     @ApiOperation("我的预约列表 支持两种状态 [WAIT_TO_STORE, DONE]")
-    @GetMapping("/appointment/app/appointments")
+    @GetMapping("/app/books")
     public Tip myAppointments(Page<Appointment> page,
                               @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                               @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
@@ -85,15 +85,15 @@ public class AppointmentPersonalEndpoint extends BaseController {
         page.setCurrent(pageNum);
         page.setSize(pageSize);
 
-        Long memberId = JWTKit.getUserId(getHttpServletRequest());
+        Long memberId = JWTKit.getUserId();
         page.setRecords(appointmentService.myAppointments(page, memberId, status));
         return SuccessTip.create(page);
     }
 
-    @GetMapping("/appointment/app/appointments/{id}")
+    @GetMapping("/app/books/{id}")
     @ApiOperation("查看自己的预约详情")
     public Tip getMyAppointment(@PathVariable Long id) {
-        throw new BusinessException(BusinessCode.NotSupport.getCode(), "调用 /api/appointment/appointments/{id}");
+        throw new BusinessException(BusinessCode.NotSupport.getCode(), "调用 /api/booking/books/{id}");
         /*Appointment appointment = appointmentService.retrieveMaster(id);
         Long userId = JWTKit.getUserId(getHttpServletRequest());
         if (!appointment.getMemberId().equals(userId) ||
