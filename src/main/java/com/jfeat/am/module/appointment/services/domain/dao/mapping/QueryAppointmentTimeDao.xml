@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.appointment.services.domain.dao.QueryAppointmentTimeDao">
+                                                                                                                                                                                                                                                                                                                                                                                                    <sql id="Base_Column_List">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                t_appointment_time.id, t_appointment_time.user_id AS userId, t_appointment_time.start_time AS startTime, t_appointment_time.end_time AS endTime, t_appointment_time.status, t_appointment_time.period_id AS periodId, t_appointment_time.period_name AS periodName, t_appointment_time.note, t_appointment_time.create_time AS createTime, t_appointment_time.update_time AS updateTime
+    </sql>
+
+    
+    
+    <select id="queryMasterModel" resultType="AppointmentTimeModel">
+       SELECT t_appointment_time.*
+       FROM t_appointment_time
+       WHERE t_appointment_time.id=#{id}
+       GROUP BY t_appointment_time.id
+    </select>
+
+
+
+                                        
+    <select id="findAppointmentTimePage" resultType="AppointmentTimeRecord" parameterType="AppointmentTimeRecord">
+            SELECT <include refid="Base_Column_List"/>
+
+        
+
+        FROM t_appointment_time
+
+        
+        
+        WHERE 1=1
+        
+
+        
+                                                                            <if test="record.id != null and record.id>0 ">
+                                    AND t_appointment_time.id LIKE CONCAT('%',#{record.id},'%')
+                            </if>
+                                                                    
+
+                                                                                        <if test="record.userId != null and record.userId>0 ">
+                                    AND t_appointment_time.user_id LIKE CONCAT('%',#{record.userId},'%')
+                            </if>
+                                                                    
+
+                                                                                        <if test="record.startTime != null and record.startTime>0 ">
+                                    AND t_appointment_time.start_time LIKE CONCAT('%',#{record.startTime},'%')
+                            </if>
+                                                                    
+
+                                                                                        <if test="record.endTime != null and record.endTime>0 ">
+                                    AND t_appointment_time.end_time LIKE CONCAT('%',#{record.endTime},'%')
+                            </if>
+                                                                    <if test="record.status != null and record.status>0 ">
+                                    AND t_appointment_time.status LIKE CONCAT('%',#{record.status},'%')
+                            </if>
+                                                                    
+
+                                                                                        <if test="record.periodId != null and record.periodId>0 ">
+                                    AND t_appointment_time.period_id LIKE CONCAT('%',#{record.periodId},'%')
+                            </if>
+                                                                    
+
+                                                                                        <if test="record.periodName != null and record.periodName!= ''">
+                                    AND t_appointment_time.period_name LIKE CONCAT('%',#{record.periodName},'%')
+                            </if>
+                                                                    <if test="record.note != null and record.note!= ''">
+                                    AND t_appointment_time.note LIKE CONCAT('%',#{record.note},'%')
+                            </if>
+                                                                                
+
+                                                                                        <if test="record.createTime != null and record.createTime>0 ">
+                                    AND t_appointment_time.create_time LIKE CONCAT('%',#{record.createTime},'%')
+                            </if>
+                                                                                
+
+                                                                                        <if test="record.updateTime != null and record.updateTime>0 ">
+                                    AND t_appointment_time.update_time LIKE CONCAT('%',#{record.updateTime},'%')
+                            </if>
+        
+        <if test="startTime != null">
+            <![CDATA[AND t_appointment_time.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND t_appointment_time.end_time <= DATE(#{endTime}]]>
+        </if>
+            <!--
+        <if test="search != null and search != ''">
+            OR t_appointment_time.name LIKE CONCAT('%',#{search},'%')
+        </if>
+        -->
+                            ORDER BY update_time DESC
+                                                    , create_time DESC
+                        </select>
+</mapper>

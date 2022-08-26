@@ -75,7 +75,7 @@ public class AppointmentTypeEndpoint {
         page.setCurrent(pageNum);
         page.setSize(pageSize);
 
-        page.setRecords(appointmentTypeService.appointmentType(page, name,status));
+        page.setRecords(appointmentTypeService.appointmentType(page, name, status));
 
         return SuccessTip.create(page);
 
